@@ -52,6 +52,8 @@ namespace Project1
 
 			setGridColors(dataGridView1, dataGridView2);
 
+//			splitContainer1->BackColor = Color::LightGray;
+
 			myApplication::initDone = true;
 		}
 
@@ -504,6 +506,8 @@ namespace Project1
 			this->splitContainer1->SplitterDistance = 290;
 			this->splitContainer1->SplitterWidth = 7;
 			this->splitContainer1->TabIndex = 30;
+			this->splitContainer1->SplitterMoved += gcnew System::Windows::Forms::SplitterEventHandler(this, &MyForm::splitContainer1_SplitterMoved);
+			this->splitContainer1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::splitContainer1_Paint);
 			// 
 			// dataGridView2
 			// 
@@ -752,5 +756,7 @@ namespace Project1
 		Void	cB_Show_Invis_CheckedChanged	(Object^, EventArgs^		 );	// Checkbox 'Show Invisible' onChange method
 		Void	cB_isIconic_CheckedChanged		(Object^, EventArgs^		 );	// Checkbox 'Window is Minimized' onChange method
 		Void	cB_CustomText_Changed			(Object^, EventArgs^		 );	// Checkbox for custom text onChange method
+		Void	splitContainer1_Paint			(Object^, PaintEventArgs^	 );	// Custom Draw for Split Container
+		Void	splitContainer1_SplitterMoved	(Object^, SplitterEventArgs^ );	// Split Container Splitter Move event
 	};
 }

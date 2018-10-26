@@ -558,6 +558,7 @@ namespace Project1
 			h = (h > splitContainer1->Height/3) ? splitContainer1->Height/3 : h;
 
 			splitContainer1->SplitterDistance = splitContainer1->Height - h;
+			splitContainer1->Panel2MinSize	  = h - splitContainer1->SplitterWidth;
 		}
 
 		setTextData(-1, -1);
@@ -907,6 +908,51 @@ namespace Project1
 		dataGridView2->Columns[myApplication::cBoxColumnNum]->Width = w2;
 
 		return;	
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Custom Draw for Split Container
+	Void MyForm::splitContainer1_Paint(Object^ sender, PaintEventArgs^ e)
+	{
+		SplitContainer^ splCont = static_cast<SplitContainer^>(sender);
+
+		if( splCont != nullptr ) 
+		{
+			int y1 = splCont->SplitterDistance + splCont->SplitterWidth/2 - 1,
+				y2 = splCont->SplitterDistance + splCont->SplitterWidth/2 + 1,
+				x1 = splCont->Width / 2 - 33,
+				x2 = splCont->Width / 2 + 33;
+
+			e->Graphics->DrawLine(Pens::DarkGray, x1, y1, x2, y1);
+			e->Graphics->DrawLine(Pens::DarkGray, x1, y2, x2, y2);
+		}	
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Split Container Splitter Move event
+	Void MyForm::splitContainer1_SplitterMoved(Object^ sender, SplitterEventArgs^ e)
+	{
+		DataGridView^ grid;
+
+		switch( activeGrid )
+		{
+			case 0:
+				grid = dataGridView1;
+				break;
+
+			case 1:
+				grid = dataGridView2;
+				break;
+
+			default:
+				grid = dataGridView1;
+		}
+
+		grid->Focus();
+
+		return;
 	}
 
 }; // namespace Project1
