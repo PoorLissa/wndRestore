@@ -14,6 +14,8 @@ namespace myApplication {
 
 	BOOL CALLBACK enumWindowsProc(HWND, LPARAM);
 
+	#define FILTER_TXT "Enter filter text here..."
+
 	typedef
 		#ifndef UNICODE 
 			std::string myString;

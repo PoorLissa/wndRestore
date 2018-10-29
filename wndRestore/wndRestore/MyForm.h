@@ -23,38 +23,10 @@ namespace Project1
 	public ref class MyForm : public Form
 	{
 	 public:
-		MyForm(void)
+		MyForm()
 		{
-			myApplication::initDone = false;
-
-			InitializeComponent();
-
-			// Add checkbox row to our DataGridView
-			{
-				addCheckBox_toTheGrid(dataGridView1, 1, myApplication::cBoxColumnNum, "Selected ");
-				addCheckBox_toTheGrid(dataGridView2, 1, myApplication::cBoxColumnNum,	  "Keep ");
-
-				defaultColor	  = tB_Title->BackColor;
-				dirtyColor		  = Color::FromArgb(250, 100,  40);
-				changedColor	  = Color::FromArgb(240, 210,  60);
-				alternateRowColor = Color::FromArgb(233, 233, 233);
-			}
-
-			cpp_app.setShowVisible(cB_Show_Invis->Checked);
-
-			// Get current windows
-			button2_Click(nullptr, nullptr);
-
-			activeGrid = -1;
-
-			dataGridView1->DefaultCellStyle->SelectionBackColor = Color::FromArgb(255, 111, 3);
-			dataGridView2->DefaultCellStyle->SelectionBackColor = Color::FromArgb(255, 111, 3);
-
-			setGridColors(dataGridView1, dataGridView2);
-
-//			splitContainer1->BackColor = Color::LightGray;
-
-			myApplication::initDone = true;
+			InitializeComponent();		// Required method for Designer support - do not modify the contents of this method with the code editor
+			init_MyForm();				// init for Constructor
 		}
 
 	 protected:
@@ -72,6 +44,7 @@ namespace Project1
 		Button		 ^button1, ^button2, ^button3, ^button4, ^button5;
 		TextBox		 ^tB_Title, ^tB_Class, ^tB_Path;
 		TextBox		 ^tB_oldX, ^tB_oldY, ^tB_oldW, ^tB_oldH, ^tB_NewH, ^tB_NewW, ^tB_NewY, ^tB_NewX;
+		TextBox		 ^tB_Filter1;
 		Panel		 ^panel1, ^panel2;
 
 		System::Windows::Forms::Label^	label1;
@@ -88,7 +61,7 @@ namespace Project1
 		CheckBox						^cB_Show_Invis, ^cB_isIconic, ^cB_Path, ^cB_Class, ^cB_Title;
 		SplitContainer					^splitContainer1;
 		DataGridView					^dataGridView1, ^dataGridView2;
-		DataGridViewTextBoxColumn		^id, ^Short, ^Long, ^id2, ^dataGridViewTextBoxColumn2, ^dataGridViewTextBoxColumn3;
+		DataGridViewTextBoxColumn		^id, ^id2, ^Short, ^Long, ^dataGridViewTextBoxColumn2, ^dataGridViewTextBoxColumn3;
 
 		System::ComponentModel::Container^	components;
 	
@@ -99,11 +72,11 @@ namespace Project1
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle5 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle6 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle3 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle4 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle7 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle8 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tB_Title = (gcnew System::Windows::Forms::TextBox());
 			this->tB_Class = (gcnew System::Windows::Forms::TextBox());
@@ -134,6 +107,7 @@ namespace Project1
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->splitContainer1 = (gcnew System::Windows::Forms::SplitContainer());
+			this->tB_Filter1 = (gcnew System::Windows::Forms::TextBox());
 			this->dataGridView2 = (gcnew System::Windows::Forms::DataGridView());
 			this->id2 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn2 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
@@ -209,19 +183,19 @@ namespace Project1
 			this->dataGridView1->AllowUserToAddRows = false;
 			this->dataGridView1->AllowUserToDeleteRows = false;
 			this->dataGridView1->AllowUserToResizeRows = false;
-			dataGridViewCellStyle1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
 			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle6->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle6->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle6->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle6->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle6->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle6->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this->dataGridView1->ColumnHeadersHeight = 25;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id, this->Short, 
@@ -267,7 +241,7 @@ namespace Project1
 			// Long
 			// 
 			this->Long->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
-			this->Long->HeaderText = L"Window Title -- Currently Active Windows";
+			this->Long->HeaderText = L"Window Title -- Active Windows";
 			this->Long->MinimumWidth = 200;
 			this->Long->Name = L"Long";
 			this->Long->ReadOnly = true;
@@ -431,7 +405,7 @@ namespace Project1
 			this->button3->Name = L"button3";
 			this->button3->Size = System::Drawing::Size(154, 102);
 			this->button3->TabIndex = 23;
-			this->button3->Text = L"Save .ini";
+			this->button3->Text = L"Save";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
 			// 
@@ -495,6 +469,7 @@ namespace Project1
 			// 
 			// splitContainer1.Panel1
 			// 
+			this->splitContainer1->Panel1->Controls->Add(this->tB_Filter1);
 			this->splitContainer1->Panel1->Controls->Add(this->dataGridView1);
 			this->splitContainer1->Panel1MinSize = 100;
 			// 
@@ -509,31 +484,41 @@ namespace Project1
 			this->splitContainer1->SplitterMoved += gcnew System::Windows::Forms::SplitterEventHandler(this, &MyForm::splitContainer1_SplitterMoved);
 			this->splitContainer1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::splitContainer1_Paint);
 			// 
+			// tB_Filter1
+			// 
+			this->tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->tB_Filter1->Location = System::Drawing::Point(799, 5);
+			this->tB_Filter1->MaximumSize = System::Drawing::Size(200, 17);
+			this->tB_Filter1->Name = L"tB_Filter1";
+			this->tB_Filter1->Size = System::Drawing::Size(165, 17);
+			this->tB_Filter1->TabIndex = 8;
+			this->tB_Filter1->Tag = L"0";
+			this->tB_Filter1->WordWrap = false;
+			this->tB_Filter1->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_Filter_TextChanged);
+			this->tB_Filter1->Enter += gcnew System::EventHandler(this, &MyForm::tB_Filter1_Enter);
+			this->tB_Filter1->Leave += gcnew System::EventHandler(this, &MyForm::tB_Filter1_Leave);
+			// 
 			// dataGridView2
 			// 
 			this->dataGridView2->AllowUserToAddRows = false;
 			this->dataGridView2->AllowUserToDeleteRows = false;
 			this->dataGridView2->AllowUserToResizeRows = false;
-			dataGridViewCellStyle3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
-				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle7->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
+			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
 			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle4->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle4->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle4->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle4->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle4->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle4->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle8->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle8->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle8->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			dataGridViewCellStyle8->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle8->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle8->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle8->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
 			this->dataGridView2->ColumnHeadersHeight = 25;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
-			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, 
-				this->dataGridViewTextBoxColumn3});
+			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, this->dataGridViewTextBoxColumn3});
 			this->dataGridView2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->dataGridView2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
+			this->dataGridView2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->dataGridView2->GridColor = System::Drawing::SystemColors::ButtonShadow;
 			this->dataGridView2->Location = System::Drawing::Point(0, 0);
 			this->dataGridView2->MultiSelect = false;
@@ -571,7 +556,7 @@ namespace Project1
 			// dataGridViewTextBoxColumn3
 			// 
 			this->dataGridViewTextBoxColumn3->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
-			this->dataGridViewTextBoxColumn3->HeaderText = L"Window Title -- Inactive Windows from *.ini file";
+			this->dataGridViewTextBoxColumn3->HeaderText = L"Window Title -- Inactive Saved Windows";
 			this->dataGridViewTextBoxColumn3->MinimumWidth = 200;
 			this->dataGridViewTextBoxColumn3->Name = L"dataGridViewTextBoxColumn3";
 			this->dataGridViewTextBoxColumn3->ReadOnly = true;
@@ -698,6 +683,7 @@ namespace Project1
 			this->ClientSize = System::Drawing::Size(1092, 702);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel2);
+			this->DoubleBuffered = true;
 			this->Font = (gcnew System::Drawing::Font(L"Tahoma", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->MaximizeBox = false;
@@ -708,8 +694,10 @@ namespace Project1
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"wndRestore 2.0";
 			this->Shown += gcnew System::EventHandler(this, &MyForm::MyForm_Shown);
+			this->Resize += gcnew System::EventHandler(this, &MyForm::MyForm_Resize);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->dataGridView1))->EndInit();
 			this->splitContainer1->Panel1->ResumeLayout(false);
+			this->splitContainer1->Panel1->PerformLayout();
 			this->splitContainer1->Panel2->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->EndInit();
 			this->splitContainer1->ResumeLayout(false);
@@ -727,36 +715,42 @@ namespace Project1
 		typedef DataGridView					DGV;
 		typedef DataGridViewCellEventArgs		dgv_CellEvtArgs;
 		typedef DataGridViewCellMouseEventArgs	dgv_CellMsEvtArgs;
+		#define TMPLT template<class T>
 
-		static void addCheckBox_toTheGrid		(DGV^, UINT, UINT, const char *);
+		int		getItemIndex					(int &							);	// Get index for a selected item in the grid
+static	void	addCheckBox_toTheGrid			(DGV^, UINT, UINT, const char * );	//
+TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
+		void	FilterTextBox					(Object^, const char			);	// Universal "Enter/Leave" Event for a Filter Text Box
+		void	setTextData						(int, int						);	// Set all text data for a selected grid item
+		void	setActiveGrid					(DGV ^, int &, int &			);	// Set active grid
+		void	setGridColors					(DGV ^, DGV ^					);	// Set colors for active and inactive grids
+		void	init_MyForm						();									// Initialization for MyForm Constructor
+		DGV^	getActiveGrid					();									// Get pointer to the active grid
+		Void	MyForm_Shown					(Object^, EventArgs^			);	// Event: application window is shown for the 1st time
+		Void	button1_Click					(Object^, EventArgs^			);	// Reposition selected windows
+		Void	button2_Click					(Object^, EventArgs^			);	// Get currently active windows (refresh)
+		Void	button3_Click					(Object^, EventArgs^			);	// Save data to ini-file
+		Void	button4_Click					(Object^, EventArgs^			);	// Replace new coordinates with the current ones for a celected window
+		Void	button5_Click					(Object^, EventArgs^			);	// View selected window
+		Void	dgv1_Resize						(Object^, EventArgs^			);	// Resize checkbox columns in both grids
+		Void	dgv1_SelectionChanged			(Object^, EventArgs^			);	// Move through the Grid
+		Void	dgv1_CellContentClick			(Object^, dgv_CellEvtArgs^		);	// Grid helper1 -- checkBox selection
+		Void	dgv1_KeyDown					(Object^, KeyEventArgs^			);	// Grid helper2 -- checkBox selection
+		Void	dgv1_CellDoubleClick			(Object^, dgv_CellEvtArgs^		);	// Grid helper3 -- checkBox selection
+		Void	dgv1_CellMouseClick				(Object^, dgv_CellMsEvtArgs^	);	// Grid helper4 -- grid click with additional key pressed
+		Void	tB_New_TextChanged				(Object^, EventArgs^			);	// Change of Coordinate Text Box 
+		Void	tB_Title_KeyUp					(Object^, KeyEventArgs^			);	// Change Title for a selected grid item
+		Void	tB_Title_KeyPress				(Object^, KeyPressEventArgs^	);	// Press Enter for a selected grid item's Text Property
+		Void	cB_Show_Invis_CheckedChanged	(Object^, EventArgs^			);	// Checkbox 'Show Invisible' onChange method
+		Void	cB_isIconic_CheckedChanged		(Object^, EventArgs^			);	// Checkbox 'Window is Minimized' onChange method
+		Void	cB_CustomText_Changed			(Object^, EventArgs^			);	// Checkbox for custom text onChange method
+		Void	splitContainer1_Paint			(Object^, PaintEventArgs^		);	// Custom Draw for Split Container
+		Void	splitContainer1_SplitterMoved	(Object^, SplitterEventArgs^	);	// Split Container Splitter Move event
+		Void	MyForm_Resize					(Object^, EventArgs^			);	// Main form resize event
+		Void	tB_Filter_TextChanged			(Object^, EventArgs^			);	// Filtering grid1
+		Void	tB_Filter1_Enter				(Object^, EventArgs^			);	// Enter Event for a Filter Text Box
+		Void	tB_Filter1_Leave				(Object^, EventArgs^			);	// Leave Event for a Filter Text Box
 
-		template<class T>
-		void	setGridCheckbox					(DataGridView^, T&, int, int );
-
-		int		getItemIndex					(int &						 );	// Get index for a selected item in the grid
-		void	setTextData						(int, int					 );	// Set all text data for a selected grid item
-		void	setActiveGrid					(DGV ^, int &, int &		 );	// Set active grid
-		void	setGridColors					(DGV ^, DGV ^				 );	// Set colors for active and inactive grids
-		DGV^	getActiveGrid					();								// Get pointer to the active grid
-		Void	MyForm_Shown					(Object^, EventArgs^		 );	// Event: application window is shown for the 1st time
-		Void	button1_Click					(Object^, EventArgs^		 );	// Reposition selected windows
-		Void	button2_Click					(Object^, EventArgs^		 );	// Get currently active windows (refresh)
-		Void	button3_Click					(Object^, EventArgs^		 );	// Save data to ini-file
-		Void	button4_Click					(Object^, EventArgs^		 );	// Replace new coordinates with the current ones for a celected window
-		Void	button5_Click					(Object^, EventArgs^		 );	// View selected window
-		Void	dgv1_Resize						(Object^, EventArgs^		 );	// Resize checkbox columns in both grids
-		Void	dgv1_SelectionChanged			(Object^, EventArgs^		 );	// Move through the Grid
-		Void	dgv1_CellContentClick			(Object^, dgv_CellEvtArgs^   );	// Grid helper1 -- checkBox selection
-		Void	dgv1_KeyDown					(Object^, KeyEventArgs^		 );	// Grid helper2 -- checkBox selection
-		Void	dgv1_CellDoubleClick			(Object^, dgv_CellEvtArgs^   );	// Grid helper3 -- checkBox selection
-		Void	dgv1_CellMouseClick				(Object^, dgv_CellMsEvtArgs^ );	// Grid helper4 -- grid click with additional key pressed
-		Void	tB_New_TextChanged				(Object^, EventArgs^		 );	// Change of Coordinate Text Box 
-		Void	tB_Title_KeyUp					(Object^, KeyEventArgs^		 );	// Change Title for a selected grid item
-		Void	tB_Title_KeyPress				(Object^, KeyPressEventArgs^ );	// Press Enter for a selected grid item's Text Property
-		Void	cB_Show_Invis_CheckedChanged	(Object^, EventArgs^		 );	// Checkbox 'Show Invisible' onChange method
-		Void	cB_isIconic_CheckedChanged		(Object^, EventArgs^		 );	// Checkbox 'Window is Minimized' onChange method
-		Void	cB_CustomText_Changed			(Object^, EventArgs^		 );	// Checkbox for custom text onChange method
-		Void	splitContainer1_Paint			(Object^, PaintEventArgs^	 );	// Custom Draw for Split Container
-		Void	splitContainer1_SplitterMoved	(Object^, SplitterEventArgs^ );	// Split Container Splitter Move event
+		#undef TMPLT
 	};
 }

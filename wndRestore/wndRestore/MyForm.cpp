@@ -31,6 +31,43 @@ void Main(array<String^>^ args)
 
 namespace Project1
 {
+	// Initialization for MyForm Constructor
+	void MyForm::init_MyForm()
+	{
+		myApplication::initDone = false;
+
+		// Add checkbox row to our DataGridView
+		{
+			addCheckBox_toTheGrid(dataGridView1, 1, myApplication::cBoxColumnNum, "Selected ");
+			addCheckBox_toTheGrid(dataGridView2, 1, myApplication::cBoxColumnNum,	  "Keep ");
+
+			defaultColor	  = tB_Title->BackColor;
+			dirtyColor		  = Color::FromArgb(250, 100,  40);
+			changedColor	  = Color::FromArgb(240, 210,  60);
+			alternateRowColor = Color::FromArgb(233, 233, 233);
+		}
+
+		cpp_app.setShowVisible(cB_Show_Invis->Checked);
+
+		// Get current windows
+		button2_Click(nullptr, nullptr);
+
+		activeGrid = -1;
+
+		dataGridView1->DefaultCellStyle->SelectionBackColor = Color::FromArgb(255, 111, 3);
+		dataGridView2->DefaultCellStyle->SelectionBackColor = Color::FromArgb(255, 111, 3);
+
+		setGridColors(dataGridView1, dataGridView2);
+
+		tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 9, FontStyle::Regular, GraphicsUnit::Point, static_cast<System::Byte>(204)));
+		tB_Filter1->Text = FILTER_TXT;
+
+		myApplication::initDone = true;
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------\
+
 	// Get pointer to the active grid
 	DataGridView^ MyForm::getActiveGrid()
 	{
@@ -213,6 +250,10 @@ namespace Project1
 	Void MyForm::button1_Click(Object^ sender, EventArgs^ e)
 	{
 		cpp_app.repositionWindows();
+
+		// In case main window gets covered by other windows, make it visible again
+		HWND hWnd = static_cast<HWND>(Handle.ToPointer());
+		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 		return;
 	}
@@ -471,6 +512,9 @@ namespace Project1
 
 		myApplication::initDone = false;
 
+		tB_Filter1->Text = "";
+		tB_Filter1_Leave(tB_Filter1, nullptr);
+
 		// Clear all our grid data
 		{
 			dataGridView1->Rows->Clear();
@@ -548,12 +592,17 @@ namespace Project1
 		sss = dataGridView2->Columns[myApplication::cBoxColumnNum]->HeaderText;
 		dataGridView2->Columns[myApplication::cBoxColumnNum]->HeaderText = sss->Substring(0, sss->IndexOf(' ') + 1) + "(" + num4 + ")";
 
-		// Set splitter distance so that grid2 has the minimal height
+		// Set splitter distance so that grid2 had the minimal height
 		{
 			h = dataGridView2->ColumnHeadersHeight + splitContainer1->SplitterWidth;
 
-			for(int i = 0; i < dataGridView2->Rows->Count; i++)
-				h += dataGridView2->Rows[i]->Height + 1;
+			int cnt = dataGridView2->Rows->Count;
+
+			if( cnt )
+				for(int i = 0; i < dataGridView2->Rows->Count; i++)
+					h += dataGridView2->Rows[i]->Height + 1;
+			else
+				h += 10;
 
 			h = (h > splitContainer1->Height/3) ? splitContainer1->Height/3 : h;
 
@@ -869,7 +918,7 @@ namespace Project1
 		bool vScrollBarVisible1 = false;
 		bool vScrollBarVisible2 = false;
 
-		int w1 = 100, w2 = 100, width1, width2;
+		int w1 = 100, w2 = 100, width1 = 0, width2 = 0;
 
 		// Check if Vertical Scroll Bar is visible
 		for(int i = 0; i < dataGridView1->Controls->Count; i++ )
@@ -907,6 +956,8 @@ namespace Project1
 		dataGridView1->Columns[myApplication::cBoxColumnNum]->Width = w1;
 		dataGridView2->Columns[myApplication::cBoxColumnNum]->Width = w2;
 
+		tB_Filter1->Width = dataGridView1->Columns[1]->Width + dataGridView1->Columns[2]->Width - tB_Filter1->Left - 1;
+
 		return;	
 	}
 	// ----------------------------------------------------------------------------------------------------------------
@@ -916,10 +967,11 @@ namespace Project1
 	{
 		SplitContainer^ splCont = static_cast<SplitContainer^>(sender);
 
-		if( splCont != nullptr ) 
+		if( splCont != nullptr )
 		{
 			int y1 = splCont->SplitterDistance + splCont->SplitterWidth/2 - 1,
 				y2 = splCont->SplitterDistance + splCont->SplitterWidth/2 + 1,
+				y3 = splCont->Panel1->Height + 3,
 				x1 = splCont->Width / 2 - 33,
 				x2 = splCont->Width / 2 + 33;
 
@@ -951,6 +1003,129 @@ namespace Project1
 		}
 
 		grid->Focus();
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Main form resize event
+	Void MyForm::MyForm_Resize(Object^ sender, EventArgs^ e)
+	{
+		// Refresh SplitSontainer in order to properly draw additional graphics in its Paint event
+		splitContainer1->Refresh();
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Filtering grid1
+	Void MyForm::tB_Filter_TextChanged(Object^ sender, EventArgs^ e)
+	{
+		if( myApplication::initDone )
+		{
+			TextBox ^tb = static_cast<TextBox ^>(sender);
+
+			if( tb->Tag == "1" )
+			{
+				int num1 = 0, num3 = 0, h;
+
+				// Clear all our grid data
+				dataGridView1->Rows->Clear();
+
+				myApplication::myString str0;
+				cpp_app.getStr_fromSystem(tB_Filter1->Text, str0);
+				std::string str2 = cpp_app.getStr(str0);
+				std::transform(str2.begin(), str2.end(), str2.begin(), ::tolower);
+
+				// Fill grid1 with data
+				for(UINT i = 0; i < myApplication::vec_data.size(); i++)
+				{
+					auto data = &(myApplication::vec_data[i]);
+
+					if( cB_Show_Invis->Checked || data->isVisible )
+					{
+						std::string str1 = cpp_app.getStr(data->windowTitle);
+						std::transform(str1.begin(), str1.end(), str1.begin(), ::tolower);
+
+						if( cpp_app.regExpCompare(str1, str2) )
+						{
+							num1++;
+
+							if( data->isChecked )
+								num3++;
+
+							String^ wndTitle    = gcnew String(data->windowTitleOrig.c_str());
+							String^ wndClass    = gcnew String(data->windowClassOrig.c_str());
+							String^ wndExeShort = gcnew String(data->shortExeName   .c_str());
+							String^ wndExeFull  = gcnew String(data->fullExeNameOrig.c_str());
+
+							dataGridView1->Rows->Add(data->index, wndExeShort, wndTitle, data->isChecked ? "1" : "0");
+						}
+					}
+				}
+
+				dataGridView1->ClearSelection();
+				dataGridView1->Columns[1]->HeaderText = "Executable (" + num1 + ")";
+
+				String^ sss;
+				sss = dataGridView1->Columns[myApplication::cBoxColumnNum]->HeaderText;
+				dataGridView1->Columns[myApplication::cBoxColumnNum]->HeaderText = sss->Substring(0, sss->IndexOf(' ') + 1) + "(" + num3 + ")";
+
+				setTextData(-1, -1);
+
+				// here h acts as a tmp parameter that is not needed
+				setActiveGrid(dataGridView1, h, h);
+			}
+		}
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Enter Event for a Filter Text Box
+	Void MyForm::tB_Filter1_Enter(Object^ sender, EventArgs^ e)
+	{
+		FilterTextBox(sender, 'E');
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Leave Event for a Filter Text Box
+	Void MyForm::tB_Filter1_Leave(Object^ sender, EventArgs^ e)
+	{
+		FilterTextBox(sender, 'L');
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Enter / Leave Event for a Filter Text Box
+	void MyForm::FilterTextBox(Object^ sender, const char mode)
+	{
+		TextBox ^tb = static_cast<TextBox ^>(sender);
+
+		tb->TextChanged -= gcnew System::EventHandler(this, &MyForm::tB_Filter_TextChanged);
+
+		switch( mode )
+		{
+			case 'E'/*ENTER*/:
+			
+				if( tb->Text == FILTER_TXT )
+				{
+					tb->ForeColor = Color::Black;
+					tb->Text = "";
+					tb->Tag = "1";
+				}
+				break;
+
+			case 'L'/*LEAVE*/:
+			
+				if( tb->Text == "" )
+				{
+					tb->ForeColor = Color::FromArgb(190, 190, 190);
+					tb->Text = FILTER_TXT;
+					tb->Tag = "0";
+				}
+				break;
+		}
+
+		tb->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_Filter_TextChanged);
 
 		return;
 	}

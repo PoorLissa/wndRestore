@@ -795,33 +795,47 @@ namespace myApplication
 				continue;					\
 			}
 
-		bool res = false;
-		std::string Expr;
+		// We will store 'Expr' and 'rx' as statics, so we don't need to rebuild them every time. They will be rebuilt only when 'expr' changes to something else.
+		static std::string Expr(""), old("");
+		static std::regex  rx;
+		bool   res(true), reInit(false);
 
-		// Replace certain symbols for the needs or regex
-		for(size_t i = 0; i < expr.length(); i++)
+		if( !expr.empty() )
 		{
-			REPLACE_REGEX_SYMBOL('*',	"(.*)");
-			REPLACE_REGEX_SYMBOL('\\',	"\\\\");
-			REPLACE_REGEX_SYMBOL('[',	"\\[" );
-			REPLACE_REGEX_SYMBOL(']',	"\\]" );
+			if( old != expr )
+			{
+				old = expr;
+				Expr.clear();
+				reInit = true;
 
-			Expr += expr[i];
-		}
+				// Replace certain symbols for the needs or regex
+				for(size_t i = 0; i < expr.length(); i++)
+				{
+					REPLACE_REGEX_SYMBOL('*',	"(.*)");
+					REPLACE_REGEX_SYMBOL('\\',	"\\\\");
+					REPLACE_REGEX_SYMBOL('[',	"\\[" );
+					REPLACE_REGEX_SYMBOL(']',	"\\]" );
 
-		// Some untreated characters in Expr will cause exception ('*', '\\', '[', ']' etc)
-		try
-		{
-			std::cmatch mr; 
-			std::regex rx(Expr);
+					Expr += expr[i];
+				}
+			}
 
-			res = regex_search(text.begin(), text.end(), rx);
-		}
-		catch(...)
-		{
-		   _error = "Function regExpCompare() caused Exception for the :\n\n";
-		   _error += " - text: " + text + "\n";
-		   _error += " - expr: " + Expr + "\n";
+			// Some untreated characters in Expr will cause exception ('*', '\\', '[', ']' etc)
+			try
+			{
+				if( reInit )
+					rx.assign(Expr);
+
+				res = regex_search(text.begin(), text.end(), rx);
+			}
+			catch(...)
+			{
+				res = false;
+
+			   _error  = "Function regExpCompare() caused Exception for the :\n\n";
+			   _error += " - text: " + text + "\n";
+			   _error += " - expr: " + Expr + "\n";
+			}
 		}
 
 		#undef REPLACE_REGEX_SYMBOL
