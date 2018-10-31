@@ -42,8 +42,8 @@ namespace Project1
 			addCheckBox_toTheGrid(dataGridView2, 1, myApplication::cBoxColumnNum,	  "Keep ");
 
 			defaultColor	  = tB_Title->BackColor;
+			selColor		  = Color::FromArgb(200, 235, 150);
 			dirtyColor		  = Color::FromArgb(250, 100,  40);
-			changedColor	  = Color::FromArgb(240, 210,  60);
 			alternateRowColor = Color::FromArgb(233, 233, 233);
 		}
 
@@ -323,6 +323,7 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
+	// Change value of a checkbox in grid's row. Set inner 'checked' value in the vector's element.
 	template<class T>
 	void MyForm::setGridCheckbox(DataGridView^ grid, T& vec, int i, int idx)
 	{
@@ -340,8 +341,8 @@ namespace Project1
 				num++;
 		}
 		
-		String^ sss = grid->Columns[myApplication::cBoxColumnNum]->HeaderText;
-		grid->Columns[myApplication::cBoxColumnNum]->HeaderText = sss->Substring(0, sss->IndexOf(' ') + 1) + "(" + num + ")";
+		String^ s = grid->Columns[myApplication::cBoxColumnNum]->HeaderText;
+		grid->Columns[myApplication::cBoxColumnNum]->HeaderText = s->Substring(0, s->IndexOf(' ') + 1) + "(" + num + ")";
 
 		return;
 	}
@@ -505,25 +506,9 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
-	// Get currently active windows (refresh)
-	Void MyForm::button2_Click(Object^ sender, EventArgs^ e)
+	// Get all the data from Windows and from ini-file
+	void MyForm::renewPhysicalData()
 	{
-		int num1 = 0, num2 = 0, num3 = 0, num4 = 0, h;
-
-		myApplication::initDone = false;
-
-		tB_Filter1->Text = "";
-		tB_Filter1_Leave(tB_Filter1, nullptr);
-
-		// Clear all our grid data
-		{
-			dataGridView1->Rows->Clear();
-			dataGridView2->Rows->Clear();
-			dataGridView1->Refresh();
-			dataGridView2->Refresh();
-		}
-
-
 		cpp_app.getWindows();
 		cpp_app.read_ini_file();
 		cpp_app.compare_wnd_and_ini();
@@ -537,6 +522,27 @@ namespace Project1
 			cpp_app.clearLastError();
 		}
 
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Clear the grids and put the data in there again
+	void MyForm::redrawGridData()
+	{
+		myApplication::initDone = false;
+
+		int num1 = 0, num2 = 0, num3 = 0, num4 = 0, h;
+
+		tB_Filter1->Text = "";
+		tB_Filter1_Leave(tB_Filter1, nullptr);
+
+		// Clear all our grid data
+		{
+			dataGridView1->Rows->Clear();
+			dataGridView2->Rows->Clear();
+			dataGridView1->Refresh();
+			dataGridView2->Refresh();
+		}
 
 		// Fill grid1 with data
 		for(UINT i = 0; i < myApplication::vec_data.size(); i++)
@@ -555,7 +561,10 @@ namespace Project1
 				String^ wndExeShort = gcnew String(data->shortExeName   .c_str());
 				String^ wndExeFull  = gcnew String(data->fullExeNameOrig.c_str());
 
-				dataGridView1->Rows->Add(data->index, wndExeShort, wndTitle, data->isChecked ? "1" : "0");
+				int rowNo = dataGridView1->Rows->Add(data->index, wndExeShort, wndTitle, data->isChecked ? "1" : "0");
+
+				if( data->isChecked )
+					dataGridView1->Rows[rowNo]->DefaultCellStyle->BackColor = selColor;
 			}
 		}
 
@@ -585,12 +594,12 @@ namespace Project1
 		dataGridView1->Columns[1]->HeaderText = "Executable (" + num1 + ")";
 		dataGridView2->Columns[1]->HeaderText = "Executable (" + num2 + ")";
 
-		String^ sss;
-		sss = dataGridView1->Columns[myApplication::cBoxColumnNum]->HeaderText;
-		dataGridView1->Columns[myApplication::cBoxColumnNum]->HeaderText = sss->Substring(0, sss->IndexOf(' ') + 1) + "(" + num3 + ")";
+		String^ s;
+		s = dataGridView1->Columns[myApplication::cBoxColumnNum]->HeaderText;
+		dataGridView1->Columns[myApplication::cBoxColumnNum]->HeaderText = s->Substring(0, s->IndexOf(' ') + 1) + "(" + num3 + ")";
 
-		sss = dataGridView2->Columns[myApplication::cBoxColumnNum]->HeaderText;
-		dataGridView2->Columns[myApplication::cBoxColumnNum]->HeaderText = sss->Substring(0, sss->IndexOf(' ') + 1) + "(" + num4 + ")";
+		s = dataGridView2->Columns[myApplication::cBoxColumnNum]->HeaderText;
+		dataGridView2->Columns[myApplication::cBoxColumnNum]->HeaderText = s->Substring(0, s->IndexOf(' ') + 1) + "(" + num4 + ")";
 
 		// Set splitter distance so that grid2 had the minimal height
 		{
@@ -616,6 +625,17 @@ namespace Project1
 		setActiveGrid(dataGridView1, h, h);
 
 		myApplication::initDone = true;
+	
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Get currently active windows (refresh)
+	Void MyForm::button2_Click(Object^ sender, EventArgs^ e)
+	{
+		renewPhysicalData();
+
+		redrawGridData();
 
 		return;
 	}
@@ -832,6 +852,7 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
+	// Add another column with chackbox to the grid
 	void MyForm::addCheckBox_toTheGrid(DataGridView^ grid, UINT width, UINT num, const char *text)
 	{
 		DataGridViewCheckBoxColumn^ cBox = gcnew DataGridViewCheckBoxColumn(true);
@@ -1036,6 +1057,8 @@ namespace Project1
 				std::string str2 = cpp_app.getStr(str0);
 				std::transform(str2.begin(), str2.end(), str2.begin(), ::tolower);
 
+				myApplication::initDone = false;
+
 				// Fill grid1 with data
 				for(UINT i = 0; i < myApplication::vec_data.size(); i++)
 				{
@@ -1058,7 +1081,10 @@ namespace Project1
 							String^ wndExeShort = gcnew String(data->shortExeName   .c_str());
 							String^ wndExeFull  = gcnew String(data->fullExeNameOrig.c_str());
 
-							dataGridView1->Rows->Add(data->index, wndExeShort, wndTitle, data->isChecked ? "1" : "0");
+							int rowNo = dataGridView1->Rows->Add(data->index, wndExeShort, wndTitle, data->isChecked ? "1" : "0");
+
+							if( data->isChecked )
+								dataGridView1->Rows[rowNo]->DefaultCellStyle->BackColor = selColor;
 						}
 					}
 				}
@@ -1074,6 +1100,11 @@ namespace Project1
 
 				// here h acts as a tmp parameter that is not needed
 				setActiveGrid(dataGridView1, h, h);
+
+				// The number of rows in the grid will be changing, so we need to update the width of checkbox column
+				dgv1_Resize(nullptr, nullptr);
+
+				myApplication::initDone = true;
 			}
 		}
 

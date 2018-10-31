@@ -17,6 +17,8 @@ namespace Project1
 	using namespace System::Data;
 	using namespace System::Drawing;
 
+	#define TMPLT template<class T>
+
 	/// <summary>
 	/// Summary for MyForm
 	/// </summary>
@@ -38,7 +40,7 @@ namespace Project1
 		}
 
 	 private:
-		Color		  defaultColor, dirtyColor, changedColor, alternateRowColor;
+		Color		  defaultColor, dirtyColor, alternateRowColor, selColor;
 		int			  activeGrid;
 
 		Button		 ^button1, ^button2, ^button3, ^button4, ^button5;
@@ -72,11 +74,11 @@ namespace Project1
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle5 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle6 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle7 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle8 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle3 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle4 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tB_Title = (gcnew System::Windows::Forms::TextBox());
 			this->tB_Class = (gcnew System::Windows::Forms::TextBox());
@@ -183,19 +185,19 @@ namespace Project1
 			this->dataGridView1->AllowUserToAddRows = false;
 			this->dataGridView1->AllowUserToDeleteRows = false;
 			this->dataGridView1->AllowUserToResizeRows = false;
-			dataGridViewCellStyle5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle6->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle6->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle6->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle6->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle6->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle6->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle6->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this->dataGridView1->ColumnHeadersHeight = 25;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id, this->Short, 
@@ -486,7 +488,8 @@ namespace Project1
 			// 
 			// tB_Filter1
 			// 
-			this->tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->tB_Filter1->Location = System::Drawing::Point(799, 5);
 			this->tB_Filter1->MaximumSize = System::Drawing::Size(200, 17);
 			this->tB_Filter1->Name = L"tB_Filter1";
@@ -503,22 +506,26 @@ namespace Project1
 			this->dataGridView2->AllowUserToAddRows = false;
 			this->dataGridView2->AllowUserToDeleteRows = false;
 			this->dataGridView2->AllowUserToResizeRows = false;
-			dataGridViewCellStyle7->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
+			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
 			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle8->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle8->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle8->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			dataGridViewCellStyle8->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle8->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle8->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle8->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle4->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle4->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			dataGridViewCellStyle4->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle4->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle4->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle4->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this->dataGridView2->ColumnHeadersHeight = 25;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
-			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, this->dataGridViewTextBoxColumn3});
+			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, 
+				this->dataGridViewTextBoxColumn3});
 			this->dataGridView2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->dataGridView2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->dataGridView2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->dataGridView2->GridColor = System::Drawing::SystemColors::ButtonShadow;
 			this->dataGridView2->Location = System::Drawing::Point(0, 0);
 			this->dataGridView2->MultiSelect = false;
@@ -715,16 +722,17 @@ namespace Project1
 		typedef DataGridView					DGV;
 		typedef DataGridViewCellEventArgs		dgv_CellEvtArgs;
 		typedef DataGridViewCellMouseEventArgs	dgv_CellMsEvtArgs;
-		#define TMPLT template<class T>
 
 		int		getItemIndex					(int &							);	// Get index for a selected item in the grid
-static	void	addCheckBox_toTheGrid			(DGV^, UINT, UINT, const char * );	//
+static	void	addCheckBox_toTheGrid			(DGV^, UINT, UINT, const char * );	// Add another column with chackbox to the grid
 TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		void	FilterTextBox					(Object^, const char			);	// Universal "Enter/Leave" Event for a Filter Text Box
 		void	setTextData						(int, int						);	// Set all text data for a selected grid item
 		void	setActiveGrid					(DGV ^, int &, int &			);	// Set active grid
 		void	setGridColors					(DGV ^, DGV ^					);	// Set colors for active and inactive grids
 		void	init_MyForm						();									// Initialization for MyForm Constructor
+		void	renewPhysicalData				();									// Get all the data from Windows and from ini-file
+		void	redrawGridData					();									// Clear the grids and put the data in there again
 		DGV^	getActiveGrid					();									// Get pointer to the active grid
 		Void	MyForm_Shown					(Object^, EventArgs^			);	// Event: application window is shown for the 1st time
 		Void	button1_Click					(Object^, EventArgs^			);	// Reposition selected windows
@@ -750,7 +758,7 @@ TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		Void	tB_Filter_TextChanged			(Object^, EventArgs^			);	// Filtering grid1
 		Void	tB_Filter1_Enter				(Object^, EventArgs^			);	// Enter Event for a Filter Text Box
 		Void	tB_Filter1_Leave				(Object^, EventArgs^			);	// Leave Event for a Filter Text Box
-
-		#undef TMPLT
 	};
+
+	#undef TMPLT
 }
