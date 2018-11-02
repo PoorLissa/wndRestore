@@ -40,14 +40,13 @@ namespace Project1
 		}
 
 	 private:
-		Color		  defaultColor, dirtyColor, alternateRowColor, selColor;
-		int			  activeGrid;
+		Color			 defaultColor, dirtyColor, alternateRowColor, selColor;
+		int				 activeGrid;
 
-		Button		 ^button1, ^button2, ^button3, ^button4, ^button5;
-		TextBox		 ^tB_Title, ^tB_Class, ^tB_Path;
-		TextBox		 ^tB_oldX, ^tB_oldY, ^tB_oldW, ^tB_oldH, ^tB_NewH, ^tB_NewW, ^tB_NewY, ^tB_NewX;
-		TextBox		 ^tB_Filter1;
-		Panel		 ^panel1, ^panel2;
+		Button			^button1,	  ^button2,		^button3,	  ^button4,		^button5;
+		TextBox			^tB_Title,	  ^tB_Class,	^tB_Path,	  ^tB_Filter1;
+		NumericUpDown	^numUpD_NewX, ^numUpD_NewH, ^numUpD_NewW, ^numUpD_NewY, ^numUpD_OldH, ^numUpD_OldW, ^numUpD_OldY, ^numUpD_OldX;
+		Panel			^panel1,	  ^panel2;
 
 		System::Windows::Forms::Label^	label1;
 		System::Windows::Forms::Label^	label2;
@@ -64,6 +63,8 @@ namespace Project1
 		SplitContainer					^splitContainer1;
 		DataGridView					^dataGridView1, ^dataGridView2;
 		DataGridViewTextBoxColumn		^id, ^id2, ^Short, ^Long, ^dataGridViewTextBoxColumn2, ^dataGridViewTextBoxColumn3;
+	private: System::Windows::Forms::Button^  button6;
+	private: System::Windows::Forms::Label^  label11;
 
 		System::ComponentModel::Container^	components;
 	
@@ -74,11 +75,11 @@ namespace Project1
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle9 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle10 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle3 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle4 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle11 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle12 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tB_Title = (gcnew System::Windows::Forms::TextBox());
 			this->tB_Class = (gcnew System::Windows::Forms::TextBox());
@@ -87,15 +88,7 @@ namespace Project1
 			this->id = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Short = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Long = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->tB_oldX = (gcnew System::Windows::Forms::TextBox());
-			this->tB_oldY = (gcnew System::Windows::Forms::TextBox());
-			this->tB_oldW = (gcnew System::Windows::Forms::TextBox());
-			this->tB_oldH = (gcnew System::Windows::Forms::TextBox());
 			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->tB_NewH = (gcnew System::Windows::Forms::TextBox());
-			this->tB_NewW = (gcnew System::Windows::Forms::TextBox());
-			this->tB_NewY = (gcnew System::Windows::Forms::TextBox());
-			this->tB_NewX = (gcnew System::Windows::Forms::TextBox());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
@@ -116,12 +109,22 @@ namespace Project1
 			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->numUpD_OldH = (gcnew System::Windows::Forms::NumericUpDown());
+			this->numUpD_NewH = (gcnew System::Windows::Forms::NumericUpDown());
+			this->numUpD_OldW = (gcnew System::Windows::Forms::NumericUpDown());
 			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->numUpD_OldY = (gcnew System::Windows::Forms::NumericUpDown());
+			this->numUpD_NewW = (gcnew System::Windows::Forms::NumericUpDown());
+			this->numUpD_OldX = (gcnew System::Windows::Forms::NumericUpDown());
 			this->cB_Path = (gcnew System::Windows::Forms::CheckBox());
+			this->numUpD_NewY = (gcnew System::Windows::Forms::NumericUpDown());
 			this->cB_Class = (gcnew System::Windows::Forms::CheckBox());
 			this->cB_Title = (gcnew System::Windows::Forms::CheckBox());
+			this->numUpD_NewX = (gcnew System::Windows::Forms::NumericUpDown());
 			this->cB_isIconic = (gcnew System::Windows::Forms::CheckBox());
 			this->cB_Show_Invis = (gcnew System::Windows::Forms::CheckBox());
+			this->label11 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->BeginInit();
 			this->splitContainer1->Panel1->SuspendLayout();
@@ -130,6 +133,14 @@ namespace Project1
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->dataGridView2))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldH))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewH))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldW))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldY))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewW))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldX))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewY))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewX))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// button1
@@ -185,19 +196,19 @@ namespace Project1
 			this->dataGridView1->AllowUserToAddRows = false;
 			this->dataGridView1->AllowUserToDeleteRows = false;
 			this->dataGridView1->AllowUserToResizeRows = false;
-			dataGridViewCellStyle1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle9->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
 			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle10->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle10->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle10->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle10->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle10->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle10->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle10->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
 			this->dataGridView1->ColumnHeadersHeight = 25;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id, this->Short, 
@@ -249,46 +260,6 @@ namespace Project1
 			this->Long->ReadOnly = true;
 			this->Long->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 			// 
-			// tB_oldX
-			// 
-			this->tB_oldX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_oldX->Location = System::Drawing::Point(51, 36);
-			this->tB_oldX->Name = L"tB_oldX";
-			this->tB_oldX->ReadOnly = true;
-			this->tB_oldX->Size = System::Drawing::Size(100, 24);
-			this->tB_oldX->TabIndex = 8;
-			// 
-			// tB_oldY
-			// 
-			this->tB_oldY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_oldY->Location = System::Drawing::Point(51, 62);
-			this->tB_oldY->Name = L"tB_oldY";
-			this->tB_oldY->ReadOnly = true;
-			this->tB_oldY->Size = System::Drawing::Size(100, 24);
-			this->tB_oldY->TabIndex = 9;
-			// 
-			// tB_oldW
-			// 
-			this->tB_oldW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_oldW->Location = System::Drawing::Point(51, 88);
-			this->tB_oldW->Name = L"tB_oldW";
-			this->tB_oldW->ReadOnly = true;
-			this->tB_oldW->Size = System::Drawing::Size(100, 24);
-			this->tB_oldW->TabIndex = 10;
-			// 
-			// tB_oldH
-			// 
-			this->tB_oldH->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_oldH->Location = System::Drawing::Point(51, 114);
-			this->tB_oldH->Name = L"tB_oldH";
-			this->tB_oldH->ReadOnly = true;
-			this->tB_oldH->Size = System::Drawing::Size(100, 24);
-			this->tB_oldH->TabIndex = 11;
-			// 
 			// button2
 			// 
 			this->button2->BackColor = System::Drawing::SystemColors::Control;
@@ -300,50 +271,6 @@ namespace Project1
 			this->button2->TabIndex = 12;
 			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
-			// 
-			// tB_NewH
-			// 
-			this->tB_NewH->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_NewH->Location = System::Drawing::Point(157, 114);
-			this->tB_NewH->Name = L"tB_NewH";
-			this->tB_NewH->Size = System::Drawing::Size(100, 24);
-			this->tB_NewH->TabIndex = 16;
-			this->tB_NewH->Tag = L"3";
-			this->tB_NewH->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_New_TextChanged);
-			// 
-			// tB_NewW
-			// 
-			this->tB_NewW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_NewW->Location = System::Drawing::Point(157, 88);
-			this->tB_NewW->Name = L"tB_NewW";
-			this->tB_NewW->Size = System::Drawing::Size(100, 24);
-			this->tB_NewW->TabIndex = 15;
-			this->tB_NewW->Tag = L"2";
-			this->tB_NewW->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_New_TextChanged);
-			// 
-			// tB_NewY
-			// 
-			this->tB_NewY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_NewY->Location = System::Drawing::Point(157, 62);
-			this->tB_NewY->Name = L"tB_NewY";
-			this->tB_NewY->Size = System::Drawing::Size(100, 24);
-			this->tB_NewY->TabIndex = 14;
-			this->tB_NewY->Tag = L"1";
-			this->tB_NewY->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_New_TextChanged);
-			// 
-			// tB_NewX
-			// 
-			this->tB_NewX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
-			this->tB_NewX->Location = System::Drawing::Point(157, 35);
-			this->tB_NewX->Name = L"tB_NewX";
-			this->tB_NewX->Size = System::Drawing::Size(100, 24);
-			this->tB_NewX->TabIndex = 13;
-			this->tB_NewX->Tag = L"0";
-			this->tB_NewX->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_New_TextChanged);
 			// 
 			// label1
 			// 
@@ -440,23 +367,23 @@ namespace Project1
 			// 
 			// button4
 			// 
-			this->button4->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->button4->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->button4->Location = System::Drawing::Point(263, 35);
 			this->button4->Name = L"button4";
-			this->button4->Size = System::Drawing::Size(171, 51);
+			this->button4->Size = System::Drawing::Size(171, 34);
 			this->button4->TabIndex = 28;
-			this->button4->Text = L"Use Current";
+			this->button4->Text = L"Set Coords";
 			this->button4->UseVisualStyleBackColor = true;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
 			// 
 			// button5
 			// 
-			this->button5->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			this->button5->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			this->button5->Location = System::Drawing::Point(263, 88);
+			this->button5->Location = System::Drawing::Point(263, 105);
 			this->button5->Name = L"button5";
-			this->button5->Size = System::Drawing::Size(171, 50);
+			this->button5->Size = System::Drawing::Size(171, 34);
 			this->button5->TabIndex = 29;
 			this->button5->Text = L"View";
 			this->button5->UseVisualStyleBackColor = true;
@@ -506,19 +433,19 @@ namespace Project1
 			this->dataGridView2->AllowUserToAddRows = false;
 			this->dataGridView2->AllowUserToDeleteRows = false;
 			this->dataGridView2->AllowUserToResizeRows = false;
-			dataGridViewCellStyle3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle11->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
 			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle4->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle4->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle12->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle12->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle12->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle4->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle4->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle4->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle4->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle12->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle12->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle12->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle12->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
 			this->dataGridView2->ColumnHeadersHeight = 25;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, 
@@ -582,10 +509,20 @@ namespace Project1
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->label11);
+			this->panel2->Controls->Add(this->button6);
+			this->panel2->Controls->Add(this->numUpD_OldH);
+			this->panel2->Controls->Add(this->numUpD_NewH);
+			this->panel2->Controls->Add(this->numUpD_OldW);
 			this->panel2->Controls->Add(this->label10);
+			this->panel2->Controls->Add(this->numUpD_OldY);
+			this->panel2->Controls->Add(this->numUpD_NewW);
+			this->panel2->Controls->Add(this->numUpD_OldX);
 			this->panel2->Controls->Add(this->cB_Path);
+			this->panel2->Controls->Add(this->numUpD_NewY);
 			this->panel2->Controls->Add(this->cB_Class);
 			this->panel2->Controls->Add(this->cB_Title);
+			this->panel2->Controls->Add(this->numUpD_NewX);
 			this->panel2->Controls->Add(this->cB_isIconic);
 			this->panel2->Controls->Add(this->cB_Show_Invis);
 			this->panel2->Controls->Add(this->button3);
@@ -593,23 +530,15 @@ namespace Project1
 			this->panel2->Controls->Add(this->label9);
 			this->panel2->Controls->Add(this->button5);
 			this->panel2->Controls->Add(this->label8);
-			this->panel2->Controls->Add(this->tB_oldX);
 			this->panel2->Controls->Add(this->label7);
 			this->panel2->Controls->Add(this->button4);
 			this->panel2->Controls->Add(this->tB_Path);
-			this->panel2->Controls->Add(this->tB_oldY);
 			this->panel2->Controls->Add(this->tB_Class);
-			this->panel2->Controls->Add(this->tB_oldW);
 			this->panel2->Controls->Add(this->tB_Title);
-			this->panel2->Controls->Add(this->tB_oldH);
 			this->panel2->Controls->Add(this->button2);
-			this->panel2->Controls->Add(this->tB_NewX);
 			this->panel2->Controls->Add(this->label6);
-			this->panel2->Controls->Add(this->tB_NewY);
 			this->panel2->Controls->Add(this->label5);
-			this->panel2->Controls->Add(this->tB_NewW);
 			this->panel2->Controls->Add(this->label4);
-			this->panel2->Controls->Add(this->tB_NewH);
 			this->panel2->Controls->Add(this->label3);
 			this->panel2->Controls->Add(this->label1);
 			this->panel2->Controls->Add(this->label2);
@@ -620,6 +549,65 @@ namespace Project1
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1092, 265);
 			this->panel2->TabIndex = 32;
+			// 
+			// button6
+			// 
+			this->button6->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->button6->Location = System::Drawing::Point(263, 70);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(171, 34);
+			this->button6->TabIndex = 44;
+			this->button6->Text = L"Move To...";
+			this->button6->UseVisualStyleBackColor = true;
+			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
+			// 
+			// numUpD_OldH
+			// 
+			this->numUpD_OldH->Enabled = false;
+			this->numUpD_OldH->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_OldH->Location = System::Drawing::Point(51, 113);
+			this->numUpD_OldH->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_OldH->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_OldH->Name = L"numUpD_OldH";
+			this->numUpD_OldH->ReadOnly = true;
+			this->numUpD_OldH->Size = System::Drawing::Size(100, 24);
+			this->numUpD_OldH->TabIndex = 43;
+			this->numUpD_OldH->Tag = L"";
+			this->numUpD_OldH->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_OldH->ThousandsSeparator = true;
+			// 
+			// numUpD_NewH
+			// 
+			this->numUpD_NewH->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_NewH->Location = System::Drawing::Point(157, 114);
+			this->numUpD_NewH->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_NewH->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_NewH->Name = L"numUpD_NewH";
+			this->numUpD_NewH->Size = System::Drawing::Size(100, 24);
+			this->numUpD_NewH->TabIndex = 39;
+			this->numUpD_NewH->Tag = L"3";
+			this->numUpD_NewH->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_NewH->ThousandsSeparator = true;
+			this->numUpD_NewH->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown_ValChanged);
+			// 
+			// numUpD_OldW
+			// 
+			this->numUpD_OldW->Enabled = false;
+			this->numUpD_OldW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_OldW->Location = System::Drawing::Point(51, 87);
+			this->numUpD_OldW->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_OldW->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_OldW->Name = L"numUpD_OldW";
+			this->numUpD_OldW->ReadOnly = true;
+			this->numUpD_OldW->Size = System::Drawing::Size(100, 24);
+			this->numUpD_OldW->TabIndex = 42;
+			this->numUpD_OldW->Tag = L"";
+			this->numUpD_OldW->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_OldW->ThousandsSeparator = true;
 			// 
 			// label10
 			// 
@@ -632,6 +620,53 @@ namespace Project1
 			this->label10->TabIndex = 35;
 			this->label10->Text = L"Custom";
 			// 
+			// numUpD_OldY
+			// 
+			this->numUpD_OldY->Enabled = false;
+			this->numUpD_OldY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_OldY->Location = System::Drawing::Point(51, 61);
+			this->numUpD_OldY->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_OldY->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_OldY->Name = L"numUpD_OldY";
+			this->numUpD_OldY->ReadOnly = true;
+			this->numUpD_OldY->Size = System::Drawing::Size(100, 24);
+			this->numUpD_OldY->TabIndex = 41;
+			this->numUpD_OldY->Tag = L"";
+			this->numUpD_OldY->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_OldY->ThousandsSeparator = true;
+			// 
+			// numUpD_NewW
+			// 
+			this->numUpD_NewW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_NewW->Location = System::Drawing::Point(157, 88);
+			this->numUpD_NewW->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_NewW->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_NewW->Name = L"numUpD_NewW";
+			this->numUpD_NewW->Size = System::Drawing::Size(100, 24);
+			this->numUpD_NewW->TabIndex = 38;
+			this->numUpD_NewW->Tag = L"2";
+			this->numUpD_NewW->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_NewW->ThousandsSeparator = true;
+			this->numUpD_NewW->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown_ValChanged);
+			// 
+			// numUpD_OldX
+			// 
+			this->numUpD_OldX->Enabled = false;
+			this->numUpD_OldX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_OldX->Location = System::Drawing::Point(51, 35);
+			this->numUpD_OldX->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_OldX->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_OldX->Name = L"numUpD_OldX";
+			this->numUpD_OldX->ReadOnly = true;
+			this->numUpD_OldX->Size = System::Drawing::Size(100, 24);
+			this->numUpD_OldX->TabIndex = 40;
+			this->numUpD_OldX->Tag = L"";
+			this->numUpD_OldX->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_OldX->ThousandsSeparator = true;
+			// 
 			// cB_Path
 			// 
 			this->cB_Path->Location = System::Drawing::Point(1052, 232);
@@ -641,6 +676,21 @@ namespace Project1
 			this->cB_Path->Tag = L"2";
 			this->cB_Path->UseVisualStyleBackColor = true;
 			this->cB_Path->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
+			// 
+			// numUpD_NewY
+			// 
+			this->numUpD_NewY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_NewY->Location = System::Drawing::Point(157, 62);
+			this->numUpD_NewY->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_NewY->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_NewY->Name = L"numUpD_NewY";
+			this->numUpD_NewY->Size = System::Drawing::Size(100, 24);
+			this->numUpD_NewY->TabIndex = 37;
+			this->numUpD_NewY->Tag = L"1";
+			this->numUpD_NewY->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_NewY->ThousandsSeparator = true;
+			this->numUpD_NewY->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown_ValChanged);
 			// 
 			// cB_Class
 			// 
@@ -662,6 +712,21 @@ namespace Project1
 			this->cB_Title->UseVisualStyleBackColor = true;
 			this->cB_Title->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
 			// 
+			// numUpD_NewX
+			// 
+			this->numUpD_NewX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->numUpD_NewX->Location = System::Drawing::Point(157, 36);
+			this->numUpD_NewX->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
+			this->numUpD_NewX->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
+			this->numUpD_NewX->Name = L"numUpD_NewX";
+			this->numUpD_NewX->Size = System::Drawing::Size(100, 24);
+			this->numUpD_NewX->TabIndex = 36;
+			this->numUpD_NewX->Tag = L"0";
+			this->numUpD_NewX->TextAlign = System::Windows::Forms::HorizontalAlignment::Right;
+			this->numUpD_NewX->ThousandsSeparator = true;
+			this->numUpD_NewX->ValueChanged += gcnew System::EventHandler(this, &MyForm::numericUpDown_ValChanged);
+			// 
 			// cB_isIconic
 			// 
 			this->cB_isIconic->AutoSize = true;
@@ -682,6 +747,15 @@ namespace Project1
 			this->cB_Show_Invis->Text = L"Show Invisible Windows";
 			this->cB_Show_Invis->UseVisualStyleBackColor = true;
 			this->cB_Show_Invis->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_Show_Invis_CheckedChanged);
+			// 
+			// label11
+			// 
+			this->label11->AutoSize = true;
+			this->label11->Location = System::Drawing::Point(302, 16);
+			this->label11->Name = L"label11";
+			this->label11->Size = System::Drawing::Size(89, 13);
+			this->label11->TabIndex = 45;
+			this->label11->Text = L"Selected Window";
 			// 
 			// MyForm
 			// 
@@ -712,6 +786,14 @@ namespace Project1
 			this->panel1->ResumeLayout(false);
 			this->panel2->ResumeLayout(false);
 			this->panel2->PerformLayout();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldH))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewH))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldW))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldY))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewW))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldX))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewY))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewX))->EndInit();
 			this->ResumeLayout(false);
 
 		}
@@ -740,13 +822,14 @@ TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		Void	button3_Click					(Object^, EventArgs^			);	// Save data to ini-file
 		Void	button4_Click					(Object^, EventArgs^			);	// Replace new coordinates with the current ones for a celected window
 		Void	button5_Click					(Object^, EventArgs^			);	// View selected window
+		Void	button6_Click					(Object^, EventArgs^			);	// Reposition single selected window (only in grid1)
 		Void	dgv1_Resize						(Object^, EventArgs^			);	// Resize checkbox columns in both grids
 		Void	dgv1_SelectionChanged			(Object^, EventArgs^			);	// Move through the Grid
 		Void	dgv1_CellContentClick			(Object^, dgv_CellEvtArgs^		);	// Grid helper1 -- checkBox selection
 		Void	dgv1_KeyDown					(Object^, KeyEventArgs^			);	// Grid helper2 -- checkBox selection
 		Void	dgv1_CellDoubleClick			(Object^, dgv_CellEvtArgs^		);	// Grid helper3 -- checkBox selection
 		Void	dgv1_CellMouseClick				(Object^, dgv_CellMsEvtArgs^	);	// Grid helper4 -- grid click with additional key pressed
-		Void	tB_New_TextChanged				(Object^, EventArgs^			);	// Change of Coordinate Text Box 
+		Void	numericUpDown_ValChanged		(Object^, EventArgs^			);	// Change of a Coordinate Numeric Box 
 		Void	tB_Title_KeyUp					(Object^, KeyEventArgs^			);	// Change Title for a selected grid item
 		Void	tB_Title_KeyPress				(Object^, KeyPressEventArgs^	);	// Press Enter for a selected grid item's Text Property
 		Void	cB_Show_Invis_CheckedChanged	(Object^, EventArgs^			);	// Checkbox 'Show Invisible' onChange method

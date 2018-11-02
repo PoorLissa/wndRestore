@@ -89,7 +89,7 @@ namespace myApplication {
 		void		getWindows			();									// Get sorted list of currently active windows with the info about them
 		int			read_ini_file		();									// Read data from the .ini-file
 		void		compare_wnd_and_ini ();									// Compare existing windows list with a list from .ini file
-		void		repositionWindows	();									// Move selected windows to their corresponding positions
+		void		repositionWindows	(const int = -1);					// Move selected windows to their corresponding positions
 		bool		save_ini			();									// Save data to ini-file
 		void		ViewWindow			(int);
 		void		setShowVisible		(bool);								// Set _showVisible flag to true/false

@@ -144,10 +144,10 @@ namespace Project1
 	{
 		Color tb_title_color = defaultColor;
 
-		cB_isIconic->CheckedChanged -= gcnew System::EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
-		   cB_Title->CheckedChanged -= gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
-		   cB_Class->CheckedChanged -= gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
-		    cB_Path->CheckedChanged -= gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
+		cB_isIconic->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
+		   cB_Title->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
+		   cB_Class->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
+		    cB_Path->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 
 		if( index >= 0 )
 		{
@@ -164,15 +164,15 @@ namespace Project1
 							tB_Class->Text = gcnew String(data->windowClass.c_str());
  							 tB_Path->Text = gcnew String(data->fullExeName.c_str());
 
-							 tB_oldX->Text = gcnew String(data->X.ToString());
-							 tB_oldY->Text = gcnew String(data->Y.ToString());
-							 tB_oldW->Text = gcnew String(data->W.ToString());
-							 tB_oldH->Text = gcnew String(data->H.ToString());
+							numUpD_OldX->Text = gcnew String(data->X.ToString());
+							numUpD_OldY->Text = gcnew String(data->Y.ToString());
+							numUpD_OldW->Text = gcnew String(data->W.ToString());
+							numUpD_OldH->Text = gcnew String(data->H.ToString());
 
-							 tB_NewX->Text = data->xNew == myApplication::defaultCoord ? "" : gcnew String(data->xNew.ToString());
-							 tB_NewY->Text = data->yNew == myApplication::defaultCoord ? "" : gcnew String(data->yNew.ToString());
-							 tB_NewW->Text = data->wNew == myApplication::defaultCoord ? "" : gcnew String(data->wNew.ToString());
-							 tB_NewH->Text = data->hNew == myApplication::defaultCoord ? "" : gcnew String(data->hNew.ToString());
+							numUpD_NewX->Text = data->xNew == myApplication::defaultCoord ? "" : gcnew String(data->xNew.ToString());
+							numUpD_NewY->Text = data->yNew == myApplication::defaultCoord ? "" : gcnew String(data->yNew.ToString());
+							numUpD_NewW->Text = data->wNew == myApplication::defaultCoord ? "" : gcnew String(data->wNew.ToString());
+							numUpD_NewH->Text = data->hNew == myApplication::defaultCoord ? "" : gcnew String(data->hNew.ToString());
 
 							cB_isIconic->Checked = data->isIconic;
 							   cB_Title->Checked = data->customTitle;
@@ -202,12 +202,12 @@ namespace Project1
 							tB_Class->Text = gcnew String(ini->Class.c_str());
  							 tB_Path->Text = gcnew String(ini->Path .c_str());
 
-							 tB_NewX->Text = gcnew String(ini->X.ToString());
-							 tB_NewY->Text = gcnew String(ini->Y.ToString());
-							 tB_NewW->Text = gcnew String(ini->W.ToString());
-							 tB_NewH->Text = gcnew String(ini->H.ToString());
+							numUpD_NewX->Text = gcnew String(ini->X.ToString());
+							numUpD_NewY->Text = gcnew String(ini->Y.ToString());
+							numUpD_NewW->Text = gcnew String(ini->W.ToString());
+							numUpD_NewH->Text = gcnew String(ini->H.ToString());
 
-							array<System::Windows::Forms::TextBox^>^ arr = { tB_oldX, tB_oldY, tB_oldW, tB_oldH };
+							array<NumericUpDown ^>^ arr = { numUpD_OldX, numUpD_OldY, numUpD_OldW, numUpD_OldH };
 
 							for(int i = 0; i < arr->Length; i++)
 								arr[i]->Text = "";
@@ -224,10 +224,14 @@ namespace Project1
 		}
 		else
 		{
-			array<System::Windows::Forms::TextBox^>^ arr = { tB_Title, tB_Class, tB_Path, tB_oldX, tB_oldY, tB_oldW, tB_oldH, tB_NewX, tB_NewY, tB_NewW, tB_NewH };
+			array<TextBox^       >^ arr1 = { tB_Title, tB_Class, tB_Path };
+			array<NumericUpDown ^>^ arr2 = { numUpD_OldX, numUpD_OldY, numUpD_OldW, numUpD_OldH, numUpD_NewX, numUpD_NewY, numUpD_NewW, numUpD_NewH };
 
-			for(int i = 0; i < arr->Length; i++)
-				arr[i]->Text = "";
+			for(int i = 0; i < arr1->Length; i++)
+				arr1[i]->Text = "";
+
+			for(int i = 0; i < arr2->Length; i++)
+				arr2[i]->Text = "";
 
 			cB_isIconic->Checked = false;
 		       cB_Title->Checked = false;
@@ -237,10 +241,10 @@ namespace Project1
 
 		tB_Title->BackColor = tb_title_color;
 
-		cB_isIconic->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
-		   cB_Title->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
-		   cB_Class->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
-		    cB_Path->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
+		cB_isIconic->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
+		   cB_Title->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
+		   cB_Class->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
+		    cB_Path->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 
 		return;
 	}
@@ -254,6 +258,24 @@ namespace Project1
 		// In case main window gets covered by other windows, make it visible again
 		HWND hWnd = static_cast<HWND>(Handle.ToPointer());
 		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Reposition single selected window (only in grid1)
+	Void MyForm::button6_Click(Object^ sender, EventArgs^ e)
+	{
+		int tag, idx = getItemIndex(tag);
+
+		if( tag == 0 )
+		{
+			cpp_app.repositionWindows(idx);
+
+			// In case main window gets covered by other windows, make it visible again
+			HWND hWnd = static_cast<HWND>(Handle.ToPointer());
+			SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		}
 
 		return;
 	}
@@ -286,6 +308,15 @@ namespace Project1
 				default:
 					activeGrid = -1;
 					size = 0;
+			}
+
+			// Enable/Disable control buttons
+			{
+				array<Button ^>^ buttons = { button4, button5, button6 };
+		
+				bool enabled = (activeGrid == 0 && grid->SelectedRows->Count > 0);
+				for(int i = 0; i < buttons->Length; i++)
+					buttons[i]->Enabled = enabled;
 			}
 
 		dataGridView1->SelectionChanged += gcnew System::EventHandler(this, &MyForm::dgv1_SelectionChanged);
@@ -641,18 +672,18 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
-	// Change of Coordinate Text Box 
-	Void MyForm::tB_New_TextChanged(Object^ sender, EventArgs^ e)
+	// Change of a Coordinate Numeric Box
+	Void MyForm::numericUpDown_ValChanged(Object^ sender, EventArgs^ e)
 	{
 		if( myApplication::initDone )
 		{
 			int tag, idx = getItemIndex(tag), num;
 
-			TextBox^ tb = static_cast<TextBox^>(sender);
+			NumericUpDown^ numUpD = static_cast<NumericUpDown^>(sender);
 
 			try {
-				
-				num = Convert::ToInt32(tb->Text);
+
+				num = Convert::ToInt32(numUpD->Value);
 
 			}
 			catch(...)
@@ -662,7 +693,7 @@ namespace Project1
 
 			if( idx > -1 )
 			{
-				int tag = Convert::ToInt32(tb->Tag);
+				int tag = Convert::ToInt32(numUpD->Tag);
 
 				auto *data = &(myApplication::vec_data[idx]);
 
@@ -977,7 +1008,7 @@ namespace Project1
 		dataGridView1->Columns[myApplication::cBoxColumnNum]->Width = w1;
 		dataGridView2->Columns[myApplication::cBoxColumnNum]->Width = w2;
 
-		tB_Filter1->Width = dataGridView1->Columns[1]->Width + dataGridView1->Columns[2]->Width - tB_Filter1->Left - 1;
+		tB_Filter1->Width = dataGridView1->Columns[1]->Width + dataGridView1->Columns[2]->Width - tB_Filter1->Left - 2;
 
 		return;	
 	}
@@ -1066,7 +1097,7 @@ namespace Project1
 
 					if( cB_Show_Invis->Checked || data->isVisible )
 					{
-						std::string str1 = cpp_app.getStr(data->windowTitle);
+						std::string str1 = cpp_app.getStr(data->windowTitleOrig);
 						std::transform(str1.begin(), str1.end(), str1.begin(), ::tolower);
 
 						if( cpp_app.regExpCompare(str1, str2) )

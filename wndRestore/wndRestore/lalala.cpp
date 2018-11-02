@@ -429,10 +429,10 @@ namespace myApplication
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Move selected windows to their corresponding positions
-	void appMain::repositionWindows()
+	void appMain::repositionWindows(const int id /*default=-1*/)
 	{
-		auto isMaximized = [](wndData *data) {   
-		
+		auto isMaximized = [](wndData *data) {
+
 			WINDOWPLACEMENT plc;
 			plc.length = sizeof(WINDOWPLACEMENT);
 			GetWindowPlacement(data->hWnd, &plc);
@@ -444,52 +444,55 @@ namespace myApplication
 		{
 			wndData *dat = &vec_data[i];
 
-			if( dat->isChecked )
+			if( id < 0 || id == dat->index )
 			{
-				if( IsWindow(dat->hWnd) )
+				if( dat->isChecked || id == dat->index )
 				{
-					do
+					if( IsWindow(dat->hWnd) )
 					{
-						// Iconic window must be reduced to (tray) icon
-						if( dat->isIconic )
+						do
 						{
-							ShowWindow(dat->hWnd, SW_HIDE);
-							SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
-							break;
-						}
-
-						// Window [1, 1, 1, 1] will be maximized on the primary monitor
-						if( dat->xNew == 1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
-						{
-							if( !isMaximized(dat) )
+							// Iconic window must be reduced to (tray) icon
+							if( dat->isIconic )
 							{
-								SetWindowPos(dat->hWnd, HWND_TOP, 100, 100, 800, 600, 0);
-								ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+								ShowWindow(dat->hWnd, SW_HIDE);
+								SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
+								break;
 							}
 
-							break;
-						}
-
-						// Window [-1, 1, 1, 1] will be maximized on the left monitor
-						if( dat->xNew == -1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
-						{
-							if( !isMaximized(dat) )
+							// Window [1, 1, 1, 1] will be maximized on the primary monitor
+							if( dat->xNew == 1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
 							{
-								SetWindowPos(dat->hWnd, HWND_TOP, -850, 100, 800, 600, 0);
-								ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+								if( !isMaximized(dat) )
+								{
+									SetWindowPos(dat->hWnd, HWND_TOP, 100, 100, 800, 600, 0);
+									ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+								}
+
+								break;
 							}
 
-							break;
-						}
+							// Window [-1, 1, 1, 1] will be maximized on the left monitor
+							if( dat->xNew == -1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
+							{
+								if( !isMaximized(dat) )
+								{
+									SetWindowPos(dat->hWnd, HWND_TOP, -850, 100, 800, 600, 0);
+									ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+								}
 
-						// Other windows will be shown as they are
-						{
-							ShowWindow(dat->hWnd, SW_RESTORE);
-							SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
-							break;
-						}
+								break;
+							}
 
-					} while(false);
+							// Other windows will be shown as they are
+							{
+								ShowWindow(dat->hWnd, SW_RESTORE);
+								SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
+								break;
+							}
+
+						} while(false);
+					}
 				}
 			}
 		}
@@ -789,12 +792,6 @@ namespace myApplication
 	// Check if the passed string matches the provided regExp expression
 	bool appMain::regExpCompare(std::string& text, std::string &expr)
 	{
-		#define REPLACE_REGEX_SYMBOL(x, y)  \
-			if( expr[i] == x ) {			\
-				Expr += y;					\
-				continue;					\
-			}
-
 		// We will store 'Expr' and 'rx' as statics, so we don't need to rebuild them every time. They will be rebuilt only when 'expr' changes to something else.
 		static std::string Expr(""), old("");
 		static std::regex  rx;
@@ -802,21 +799,32 @@ namespace myApplication
 
 		if( !expr.empty() )
 		{
+			// eliminate continuous 'Expr' calculations for the same value
 			if( old != expr )
 			{
 				old = expr;
 				Expr.clear();
 				reInit = true;
 
+				const char  oldChar[] = {   '*',    '\\',   '[',   ']' };
+				const char* newStr [] = { "(.*)", "\\\\", "\\[", "\\]" };
+
 				// Replace certain symbols for the needs or regex
 				for(size_t i = 0; i < expr.length(); i++)
 				{
-					REPLACE_REGEX_SYMBOL('*',	"(.*)");
-					REPLACE_REGEX_SYMBOL('\\',	"\\\\");
-					REPLACE_REGEX_SYMBOL('[',	"\\[" );
-					REPLACE_REGEX_SYMBOL(']',	"\\]" );
+					for(size_t j = 0; j < sizeof(oldChar)/sizeof(oldChar[0]); j++)
+					{
+						if( expr[i] == oldChar[j] )
+						{
+							Expr += newStr[j];
+							goto continue_main_loop;		// never done this before... let's try it out!!!
+						}
+					}
 
 					Expr += expr[i];
+
+					continue_main_loop:
+						continue;
 				}
 			}
 
@@ -837,8 +845,6 @@ namespace myApplication
 			   _error += " - expr: " + Expr + "\n";
 			}
 		}
-
-		#undef REPLACE_REGEX_SYMBOL
 
 		return res;
 	}
