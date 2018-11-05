@@ -59,6 +59,7 @@ namespace myApplication
 						{
 							if( data.fullExeName.find(':') != myString::npos && data.fullExeName.find('\\') != myString::npos && data.fullExeName.find('.') != myString::npos )
 							{
+								data.isChanged       = false;
 								data.windowTitleOrig = data.windowTitle;
 								data.windowClassOrig = data.windowClass;
 								data.fullExeNameOrig = data.fullExeName;
@@ -339,11 +340,11 @@ namespace myApplication
 		myString exe = getMyStr(*get_exe_path());
 
 
-		for(UINT i = 0; i < vec_ini.size(); i++)
+		for(size_t i = 0; i < vec_ini.size(); i++)
 		{
 			ini = &vec_ini[i];
 
-			for(UINT j = 0; j < vec_data.size(); j++)
+			for(size_t j = 0; j < vec_data.size(); j++)
 			{
 				dat = &vec_data[j];
 

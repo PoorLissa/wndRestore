@@ -40,33 +40,30 @@ namespace Project1
 		}
 
 	 private:
-		Color			 defaultColor, dirtyColor, alternateRowColor, selColor;
-		int				 activeGrid;
+		Color	defaultColor, dirtyColor, alternateRowColor, selColor, changedColor;
+		int		activeGrid;
 
-		Button			^button1,	  ^button2,		^button3,	  ^button4,		^button5;
-		TextBox			^tB_Title,	  ^tB_Class,	^tB_Path,	  ^tB_Filter1;
-		NumericUpDown	^numUpD_NewX, ^numUpD_NewH, ^numUpD_NewW, ^numUpD_NewY, ^numUpD_OldH, ^numUpD_OldW, ^numUpD_OldY, ^numUpD_OldX;
-		Panel			^panel1,	  ^panel2;
+		Button								^button1, ^button2, ^button3, ^button4, ^button5, ^button6;
+		TextBox								^tB_Title, ^tB_Class, ^tB_Path, ^tB_Filter1;
+		NumericUpDown						^numUpD_NewX, ^numUpD_NewH, ^numUpD_NewW, ^numUpD_NewY, ^numUpD_OldH, ^numUpD_OldW, ^numUpD_OldY, ^numUpD_OldX;
+		Panel								^panel1, ^panel2;
+		CheckBox							^cB_Show_Invis, ^cB_isIconic, ^cB_Path, ^cB_Class, ^cB_Title;
+		SplitContainer						^splitContainer1;
+		DataGridView						^dataGridView1, ^dataGridView2;
+		DataGridViewTextBoxColumn			^id, ^id2, ^Short, ^Long, ^dataGridViewTextBoxColumn2, ^dataGridViewTextBoxColumn3;
 
-		System::Windows::Forms::Label^	label1;
-		System::Windows::Forms::Label^	label2;
-		System::Windows::Forms::Label^	label3;
-		System::Windows::Forms::Label^	label4;
-		System::Windows::Forms::Label^	label5;
-		System::Windows::Forms::Label^	label6;
-		System::Windows::Forms::Label^	label7;
-		System::Windows::Forms::Label^	label8;
-		System::Windows::Forms::Label^	label9;
-		System::Windows::Forms::Label^  label10;
-
-		CheckBox						^cB_Show_Invis, ^cB_isIconic, ^cB_Path, ^cB_Class, ^cB_Title;
-		SplitContainer					^splitContainer1;
-		DataGridView					^dataGridView1, ^dataGridView2;
-		DataGridViewTextBoxColumn		^id, ^id2, ^Short, ^Long, ^dataGridViewTextBoxColumn2, ^dataGridViewTextBoxColumn3;
-	private: System::Windows::Forms::Button^  button6;
-	private: System::Windows::Forms::Label^  label11;
-
-		System::ComponentModel::Container^	components;
+		System::Windows::Forms::Label		^label1;
+		System::Windows::Forms::Label		^label2;
+		System::Windows::Forms::Label		^label3;
+		System::Windows::Forms::Label		^label4;
+		System::Windows::Forms::Label		^label5;
+		System::Windows::Forms::Label		^label6;
+		System::Windows::Forms::Label		^label7;
+		System::Windows::Forms::Label		^label8;
+		System::Windows::Forms::Label		^label9;
+		System::Windows::Forms::Label		^label10;
+		System::Windows::Forms::Label		^label11;
+		System::ComponentModel::Container	^components;
 	
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -75,11 +72,11 @@ namespace Project1
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle9 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle10 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle5 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle6 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle11 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle12 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle7 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle8 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tB_Title = (gcnew System::Windows::Forms::TextBox());
 			this->tB_Class = (gcnew System::Windows::Forms::TextBox());
@@ -109,6 +106,7 @@ namespace Project1
 			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->numUpD_OldH = (gcnew System::Windows::Forms::NumericUpDown());
 			this->numUpD_NewH = (gcnew System::Windows::Forms::NumericUpDown());
@@ -124,7 +122,6 @@ namespace Project1
 			this->numUpD_NewX = (gcnew System::Windows::Forms::NumericUpDown());
 			this->cB_isIconic = (gcnew System::Windows::Forms::CheckBox());
 			this->cB_Show_Invis = (gcnew System::Windows::Forms::CheckBox());
-			this->label11 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->dataGridView1))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->BeginInit();
 			this->splitContainer1->Panel1->SuspendLayout();
@@ -145,8 +142,7 @@ namespace Project1
 			// 
 			// button1
 			// 
-			this->button1->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
+			this->button1->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->button1->Location = System::Drawing::Point(588, 36);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(332, 102);
@@ -157,8 +153,7 @@ namespace Project1
 			// 
 			// tB_Title
 			// 
-			this->tB_Title->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
+			this->tB_Title->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->tB_Title->Location = System::Drawing::Point(51, 175);
 			this->tB_Title->Name = L"tB_Title";
 			this->tB_Title->Size = System::Drawing::Size(977, 24);
@@ -196,19 +191,19 @@ namespace Project1
 			this->dataGridView1->AllowUserToAddRows = false;
 			this->dataGridView1->AllowUserToDeleteRows = false;
 			this->dataGridView1->AllowUserToResizeRows = false;
-			dataGridViewCellStyle9->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle9;
+			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
 			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle10->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle10->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle10->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle6->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle6->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle6->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle10->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle10->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle10->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle10->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle6->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle6->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle6->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle6->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this->dataGridView1->ColumnHeadersHeight = 25;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id, this->Short, 
@@ -433,19 +428,19 @@ namespace Project1
 			this->dataGridView2->AllowUserToAddRows = false;
 			this->dataGridView2->AllowUserToDeleteRows = false;
 			this->dataGridView2->AllowUserToResizeRows = false;
-			dataGridViewCellStyle11->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle7->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle11;
+			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
 			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle12->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle12->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle12->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle8->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle8->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle8->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle12->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle12->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle12->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle12->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle8->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle8->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle8->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle8->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
 			this->dataGridView2->ColumnHeadersHeight = 25;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, 
@@ -549,6 +544,15 @@ namespace Project1
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1092, 265);
 			this->panel2->TabIndex = 32;
+			// 
+			// label11
+			// 
+			this->label11->AutoSize = true;
+			this->label11->Location = System::Drawing::Point(302, 16);
+			this->label11->Name = L"label11";
+			this->label11->Size = System::Drawing::Size(89, 13);
+			this->label11->TabIndex = 45;
+			this->label11->Text = L"Selected Window";
 			// 
 			// button6
 			// 
@@ -747,15 +751,6 @@ namespace Project1
 			this->cB_Show_Invis->Text = L"Show Invisible Windows";
 			this->cB_Show_Invis->UseVisualStyleBackColor = true;
 			this->cB_Show_Invis->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_Show_Invis_CheckedChanged);
-			// 
-			// label11
-			// 
-			this->label11->AutoSize = true;
-			this->label11->Location = System::Drawing::Point(302, 16);
-			this->label11->Name = L"label11";
-			this->label11->Size = System::Drawing::Size(89, 13);
-			this->label11->TabIndex = 45;
-			this->label11->Text = L"Selected Window";
 			// 
 			// MyForm
 			// 

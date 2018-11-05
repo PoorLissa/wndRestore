@@ -42,6 +42,8 @@ namespace Project1
 			addCheckBox_toTheGrid(dataGridView2, 1, myApplication::cBoxColumnNum,	  "Keep ");
 
 			defaultColor	  = tB_Title->BackColor;
+			changedColor	  = Color::Orange;
+			changedColor	  = Color::FromArgb(255, 190,  90);
 			selColor		  = Color::FromArgb(200, 235, 150);
 			dirtyColor		  = Color::FromArgb(250, 100,  40);
 			alternateRowColor = Color::FromArgb(233, 233, 233);
@@ -142,7 +144,9 @@ namespace Project1
 	// Set all text data for a selected grid item
 	void MyForm::setTextData(int tag, int index)
 	{
-		Color tb_title_color = defaultColor;
+		Color tb_title_color = defaultColor,
+			  tb_class_color = defaultColor,
+			  tb_path__color = defaultColor;
 
 		cB_isIconic->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
 		   cB_Title->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
@@ -178,6 +182,15 @@ namespace Project1
 							   cB_Title->Checked = data->customTitle;
 							   cB_Class->Checked = data->customClass;
 								cB_Path->Checked = data->customPath;
+
+							if( data->windowTitle != data->windowTitleOrig )
+								tb_title_color = changedColor;
+
+							if( data->windowClass != data->windowClassOrig )
+								tb_class_color = changedColor;
+
+							if( data->fullExeName != data->fullExeNameOrig )
+								tb_path__color = changedColor;
 
 							// Here we can get the list of all child processes
 							{
@@ -240,6 +253,8 @@ namespace Project1
  		}
 
 		tB_Title->BackColor = tb_title_color;
+		tB_Class->BackColor = tb_class_color;
+		 tB_Path->BackColor = tb_path__color;
 
 		cB_isIconic->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
 		   cB_Title->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
@@ -313,7 +328,7 @@ namespace Project1
 			// Enable/Disable control buttons
 			{
 				array<Button ^>^ buttons = { button4, button5, button6 };
-		
+
 				bool enabled = (activeGrid == 0 && grid->SelectedRows->Count > 0);
 				for(int i = 0; i < buttons->Length; i++)
 					buttons[i]->Enabled = enabled;
@@ -392,7 +407,7 @@ namespace Project1
 			if( grid->CurrentCell->ColumnIndex == myApplication::cBoxColumnNum )
 			{
 				int idx = grid->CurrentCell->RowIndex,
-					  i = Convert::ToInt32(grid->Rows[idx]->Cells[0]->Value->ToString());
+					  i = Convert::ToInt32(grid->Rows[idx]->Cells[0]->Value);
 
 				switch( activeGrid )
 				{
@@ -718,6 +733,8 @@ namespace Project1
 					default:
 						;
 				}
+
+				data->isChanged = true;
 			}
 		}
 
@@ -730,6 +747,22 @@ namespace Project1
 	{
 		if( myApplication::initDone )
 		{
+			std::string str("");
+			std::vector<myApplication::wndData> *vec = &(myApplication::vec_data);
+
+			for(size_t i = 0; i < vec->size(); i++)
+			{
+				if( vec->at(i).isChanged && !vec->at(i).isChecked )
+					str += "[" + cpp_app.getStr(vec->at(i).windowTitleOrig) + "]\n";
+			}
+
+			if( !str.empty() )
+			{
+				str = "Changes made to these unchecked items won't be saved:\n\n" + str;
+
+				MessageBox::Show(gcnew String(str.c_str()), "Attention!");
+			}
+
 			cpp_app.save_ini();
 		}
 
@@ -789,23 +822,32 @@ namespace Project1
 		if( tb && idx >= 0 )
 		{
 			int tb_tag = Convert::ToInt32(tb->Tag);
-			myApplication::myString new_value, *old_value;
+			myApplication::myString new_value, *old_value, orig_value;
 
 			cpp_app.getStr_fromSystem(tb->Text, new_value);
 
 			switch( tb_tag )
 			{
 				case 0:
-					old_value = &(gridTag ? myApplication::vec_ini[idx].Title : myApplication::vec_data[idx].windowTitle);
+					old_value  = &(gridTag ? myApplication::vec_ini[idx].Title : myApplication::vec_data[idx].windowTitle);
+					orig_value = gridTag ? L"" : myApplication::vec_data[idx].windowTitleOrig;
 					break;
 
 				case 1:
-					old_value = &(gridTag ? myApplication::vec_ini[idx].Class : myApplication::vec_data[idx].windowClass);
+					old_value  = &(gridTag ? myApplication::vec_ini[idx].Class : myApplication::vec_data[idx].windowClass);
+					orig_value = gridTag ? L"" : myApplication::vec_data[idx].windowClassOrig;
 					break;
 
 				case 2:
-					old_value = &(gridTag ? myApplication::vec_ini[idx].Path  : myApplication::vec_data[idx].fullExeName);
+					old_value  = &(gridTag ? myApplication::vec_ini[idx].Path  : myApplication::vec_data[idx].fullExeName);
+					orig_value = gridTag ? L"" : myApplication::vec_data[idx].fullExeNameOrig;
 					break;
+			}
+
+			if( !gridTag )
+			{
+				if( new_value != orig_value )
+					color = changedColor;
 			}
 
 			if( *old_value != new_value )
@@ -818,9 +860,10 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
-	// Press Enter for a selected grid item's Text Property
+	// Press 'Enter' for a selected grid item's Text Property
 	Void MyForm::tB_Title_KeyPress(Object^ sender, KeyPressEventArgs^ e)
 	{
+		// Handle pressing 'Enter' key:
 		if( e->KeyChar == (char)Keys::Enter )
 		{
 			int		 gridTag, idx = getItemIndex(gridTag);
@@ -829,28 +872,40 @@ namespace Project1
 			if( tb && idx >= 0 )
 			{
 				int tb_tag = Convert::ToInt32(tb->Tag);
-				myApplication::myString new_value, *old_value;
+				myApplication::myString new_value, *old_value, orig_value;
 
 				cpp_app.getStr_fromSystem(tb->Text, new_value);
 
 				switch( tb_tag )
 				{
 					case 0:
-						old_value = &(gridTag ? myApplication::vec_ini[idx].Title : myApplication::vec_data[idx].windowTitle);
+						old_value  = &(gridTag ? myApplication::vec_ini[idx].Title : myApplication::vec_data[idx].windowTitle);
+						orig_value = gridTag ? L"" : myApplication::vec_data[idx].windowTitleOrig;
 						break;
 
 					case 1:
-						old_value = &(gridTag ? myApplication::vec_ini[idx].Class : myApplication::vec_data[idx].windowClass);
+						old_value  = &(gridTag ? myApplication::vec_ini[idx].Class : myApplication::vec_data[idx].windowClass);
+						orig_value = gridTag ? L"" : myApplication::vec_data[idx].windowClassOrig;
 						break;
 
 					case 2:
-						old_value = &(gridTag ? myApplication::vec_ini[idx].Path  : myApplication::vec_data[idx].fullExeName);
+						old_value  = &(gridTag ? myApplication::vec_ini[idx].Path  : myApplication::vec_data[idx].fullExeName);
+						orig_value = gridTag ? L"" : myApplication::vec_data[idx].fullExeNameOrig;
 						break;				
 				}
 
 			   *old_value = new_value;
 
-				tb->BackColor = defaultColor;
+				if( gridTag )
+				{
+					tb->BackColor = defaultColor;
+				}
+				else
+				{
+					tb->BackColor = (new_value == orig_value) ? defaultColor : changedColor;
+
+					myApplication::vec_data[idx].isChanged = true;
+				}
 			}
 		}
 
@@ -875,9 +930,14 @@ namespace Project1
 		int tag, idx = getItemIndex(tag);
 
 		if( tag == 0 )
-			myApplication::vec_data[idx].isIconic = cB_isIconic->Checked;
+		{
+			myApplication::vec_data[idx].isIconic  = cB_isIconic->Checked;
+			myApplication::vec_data[idx].isChanged = true;
+		}
 		else
+		{
 			myApplication::vec_ini[idx].isIconic = cB_isIconic->Checked;
+		}
 
 		return;
 	}
@@ -958,6 +1018,9 @@ namespace Project1
 			{
 				*value = cBox->Checked;
 			}
+
+			if( !gridTag )
+				myApplication::vec_data[idx].isChanged = true;
 		}
 	
 		return;

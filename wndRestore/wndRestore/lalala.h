@@ -30,6 +30,7 @@ namespace myApplication {
 	static short cBoxColumnNum = 3;
 	static short defaultCoord  = -12345;
 
+	// -----------------------------------------------------------------------------------------------------------------------
 
 	struct wndData
 	{
@@ -43,8 +44,10 @@ namespace myApplication {
 		myString	windowTitle, windowClass, fullExeName, shortExeName, windowTitleOrig, windowClassOrig, fullExeNameOrig;
 		HWND		hWnd;
 		int			X, Y, W, H, index, xNew, yNew, wNew, hNew;
-		bool		isChecked, isVisible, isIconic, customTitle, customClass, customPath;
+		bool		isChecked, isVisible, isIconic, customTitle, customClass, customPath, isChanged;
 	};
+
+	// -----------------------------------------------------------------------------------------------------------------------
 
 	struct iniData
 	{
@@ -73,10 +76,12 @@ namespace myApplication {
 		bool	    isChecked, isFound, isIconic, customTitle, customClass, customPath;
 	};
 
+	// -----------------------------------------------------------------------------------------------------------------------
 
 	extern std::vector<wndData> vec_data;
 	extern std::vector<iniData> vec_ini;
 
+	// -----------------------------------------------------------------------------------------------------------------------
 
 	class appMain
 	{
@@ -84,8 +89,7 @@ namespace myApplication {
 		appMain();
 	   ~appMain();
 
-	   	static void	 getWindowInfo		(wndData &, char = 0);				// Get additional window information
-
+static	void		getWindowInfo		(wndData &, char = 0);				// Get additional window information
 		void		getWindows			();									// Get sorted list of currently active windows with the info about them
 		int			read_ini_file		();									// Read data from the .ini-file
 		void		compare_wnd_and_ini ();									// Compare existing windows list with a list from .ini file
