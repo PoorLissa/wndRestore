@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lalala.h"
+#include "myApp.h"
 
 // =======================================================================================================================
 
@@ -63,7 +63,10 @@ namespace Project1
 		System::Windows::Forms::Label		^label9;
 		System::Windows::Forms::Label		^label10;
 		System::Windows::Forms::Label		^label11;
-		System::ComponentModel::Container	^components;
+	private: System::Windows::Forms::StatusStrip^  statusStrip1;
+	private: System::Windows::Forms::ToolStripStatusLabel^  toolStripStatusLabel1;
+
+			 System::ComponentModel::Container	^components;
 	
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -72,11 +75,11 @@ namespace Project1
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle5 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle6 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle7 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
-			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle8 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle3 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^  dataGridViewCellStyle4 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->tB_Title = (gcnew System::Windows::Forms::TextBox());
 			this->tB_Class = (gcnew System::Windows::Forms::TextBox());
@@ -106,6 +109,8 @@ namespace Project1
 			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
+			this->toolStripStatusLabel1 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->numUpD_OldH = (gcnew System::Windows::Forms::NumericUpDown());
@@ -130,6 +135,7 @@ namespace Project1
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->dataGridView2))->BeginInit();
 			this->panel1->SuspendLayout();
 			this->panel2->SuspendLayout();
+			this->statusStrip1->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldH))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewH))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldW))->BeginInit();
@@ -142,7 +148,9 @@ namespace Project1
 			// 
 			// button1
 			// 
-			this->button1->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->button1->AccessibleDescription = L"Move all selected windows (from the upper grid) to their defined positions";
+			this->button1->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->button1->Location = System::Drawing::Point(588, 36);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(332, 102);
@@ -150,10 +158,14 @@ namespace Project1
 			this->button1->Text = L"Reposition Windows";
 			this->button1->UseVisualStyleBackColor = true;
 			this->button1->Click += gcnew System::EventHandler(this, &MyForm::button1_Click);
+			this->button1->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->button1->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// tB_Title
 			// 
-			this->tB_Title->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->tB_Title->AccessibleDescription = L"Title of the window";
+			this->tB_Title->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->tB_Title->Location = System::Drawing::Point(51, 175);
 			this->tB_Title->Name = L"tB_Title";
 			this->tB_Title->Size = System::Drawing::Size(977, 24);
@@ -161,9 +173,12 @@ namespace Project1
 			this->tB_Title->Tag = L"0";
 			this->tB_Title->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MyForm::tB_Title_KeyPress);
 			this->tB_Title->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::tB_Title_KeyUp);
+			this->tB_Title->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->tB_Title->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// tB_Class
 			// 
+			this->tB_Class->AccessibleDescription = L"Class of the window";
 			this->tB_Class->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->tB_Class->Location = System::Drawing::Point(51, 201);
@@ -173,9 +188,12 @@ namespace Project1
 			this->tB_Class->Tag = L"1";
 			this->tB_Class->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MyForm::tB_Title_KeyPress);
 			this->tB_Class->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::tB_Title_KeyUp);
+			this->tB_Class->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->tB_Class->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// tB_Path
 			// 
+			this->tB_Path->AccessibleDescription = L"Full path to the Window\'s .exe-file";
 			this->tB_Path->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->tB_Path->Location = System::Drawing::Point(51, 227);
@@ -185,25 +203,29 @@ namespace Project1
 			this->tB_Path->Tag = L"2";
 			this->tB_Path->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &MyForm::tB_Title_KeyPress);
 			this->tB_Path->KeyUp += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::tB_Title_KeyUp);
+			this->tB_Path->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->tB_Path->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// dataGridView1
 			// 
+			this->dataGridView1->AccessibleDescription = L"Curently present windows. Check the item to save it to ini-file or to reposition " 
+				L"according window";
 			this->dataGridView1->AllowUserToAddRows = false;
 			this->dataGridView1->AllowUserToDeleteRows = false;
 			this->dataGridView1->AllowUserToResizeRows = false;
-			dataGridViewCellStyle5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+			this->dataGridView1->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this->dataGridView1->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle6->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle6->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle6->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle6->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle6->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle6->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle6->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView1->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
 			this->dataGridView1->ColumnHeadersHeight = 25;
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView1->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id, this->Short, 
@@ -221,7 +243,7 @@ namespace Project1
 			this->dataGridView1->RowTemplate->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 			this->dataGridView1->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->dataGridView1->ShowRowErrors = false;
-			this->dataGridView1->Size = System::Drawing::Size(1086, 290);
+			this->dataGridView1->Size = System::Drawing::Size(1086, 263);
 			this->dataGridView1->TabIndex = 7;
 			this->dataGridView1->Tag = L"0";
 			this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgv1_CellContentClick);
@@ -229,6 +251,8 @@ namespace Project1
 			this->dataGridView1->CellMouseClick += gcnew System::Windows::Forms::DataGridViewCellMouseEventHandler(this, &MyForm::dgv1_CellMouseClick);
 			this->dataGridView1->SelectionChanged += gcnew System::EventHandler(this, &MyForm::dgv1_SelectionChanged);
 			this->dataGridView1->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::dgv1_KeyDown);
+			this->dataGridView1->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->dataGridView1->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			this->dataGridView1->Resize += gcnew System::EventHandler(this, &MyForm::dgv1_Resize);
 			// 
 			// id
@@ -257,6 +281,8 @@ namespace Project1
 			// 
 			// button2
 			// 
+			this->button2->AccessibleDescription = L"Refresh: find all windows that are present and compare them to the data from .ini" 
+				L" file";
 			this->button2->BackColor = System::Drawing::SystemColors::Control;
 			this->button2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"button2.BackgroundImage")));
 			this->button2->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Zoom;
@@ -266,6 +292,8 @@ namespace Project1
 			this->button2->TabIndex = 12;
 			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &MyForm::button2_Click);
+			this->button2->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->button2->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// label1
 			// 
@@ -323,6 +351,7 @@ namespace Project1
 			// 
 			// button3
 			// 
+			this->button3->AccessibleDescription = L"Save current state to .ini file";
 			this->button3->Font = (gcnew System::Drawing::Font(L"Tahoma", 20, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->button3->Location = System::Drawing::Point(926, 36);
@@ -332,6 +361,8 @@ namespace Project1
 			this->button3->Text = L"Save";
 			this->button3->UseVisualStyleBackColor = true;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
+			this->button3->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->button3->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// label7
 			// 
@@ -362,6 +393,7 @@ namespace Project1
 			// 
 			// button4
 			// 
+			this->button4->AccessibleDescription = L"For selected window, set its current parameters";
 			this->button4->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->button4->Location = System::Drawing::Point(263, 35);
@@ -371,9 +403,12 @@ namespace Project1
 			this->button4->Text = L"Set Coords";
 			this->button4->UseVisualStyleBackColor = true;
 			this->button4->Click += gcnew System::EventHandler(this, &MyForm::button4_Click);
+			this->button4->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->button4->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// button5
 			// 
+			this->button5->AccessibleDescription = L"Show selected window (buggy, try not to use yet)";
 			this->button5->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->button5->Location = System::Drawing::Point(263, 105);
@@ -383,6 +418,8 @@ namespace Project1
 			this->button5->Text = L"View";
 			this->button5->UseVisualStyleBackColor = true;
 			this->button5->Click += gcnew System::EventHandler(this, &MyForm::button5_Click);
+			this->button5->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->button5->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// splitContainer1
 			// 
@@ -401,8 +438,8 @@ namespace Project1
 			// 
 			this->splitContainer1->Panel2->Controls->Add(this->dataGridView2);
 			this->splitContainer1->Panel2MinSize = 100;
-			this->splitContainer1->Size = System::Drawing::Size(1086, 431);
-			this->splitContainer1->SplitterDistance = 290;
+			this->splitContainer1->Size = System::Drawing::Size(1086, 405);
+			this->splitContainer1->SplitterDistance = 263;
 			this->splitContainer1->SplitterWidth = 7;
 			this->splitContainer1->TabIndex = 30;
 			this->splitContainer1->SplitterMoved += gcnew System::Windows::Forms::SplitterEventHandler(this, &MyForm::splitContainer1_SplitterMoved);
@@ -410,6 +447,7 @@ namespace Project1
 			// 
 			// tB_Filter1
 			// 
+			this->tB_Filter1->AccessibleDescription = L"Type in custom text (can use wildcards) to filter out the windows";
 			this->tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->tB_Filter1->Location = System::Drawing::Point(799, 5);
@@ -422,25 +460,29 @@ namespace Project1
 			this->tB_Filter1->TextChanged += gcnew System::EventHandler(this, &MyForm::tB_Filter_TextChanged);
 			this->tB_Filter1->Enter += gcnew System::EventHandler(this, &MyForm::tB_Filter1_Enter);
 			this->tB_Filter1->Leave += gcnew System::EventHandler(this, &MyForm::tB_Filter1_Leave);
+			this->tB_Filter1->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->tB_Filter1->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// dataGridView2
 			// 
+			this->dataGridView2->AccessibleDescription = L"Windows from ini-file that were not found or matched. Uncheck item if you want to" 
+				L" remove it from ini-file (Save action required)";
 			this->dataGridView2->AllowUserToAddRows = false;
 			this->dataGridView2->AllowUserToDeleteRows = false;
 			this->dataGridView2->AllowUserToResizeRows = false;
-			dataGridViewCellStyle7->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+			dataGridViewCellStyle3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
 				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
-			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
+			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
 			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
-			dataGridViewCellStyle8->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle8->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle8->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+			dataGridViewCellStyle4->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle4->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			dataGridViewCellStyle8->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle8->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle8->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle8->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle4->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle4->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle4->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle4->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this->dataGridView2->ColumnHeadersHeight = 25;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
 			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, 
@@ -459,13 +501,15 @@ namespace Project1
 			this->dataGridView2->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->dataGridView2->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->dataGridView2->ShowRowErrors = false;
-			this->dataGridView2->Size = System::Drawing::Size(1086, 134);
+			this->dataGridView2->Size = System::Drawing::Size(1086, 135);
 			this->dataGridView2->TabIndex = 8;
 			this->dataGridView2->Tag = L"1";
 			this->dataGridView2->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgv1_CellContentClick);
 			this->dataGridView2->CellDoubleClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgv1_CellDoubleClick);
 			this->dataGridView2->SelectionChanged += gcnew System::EventHandler(this, &MyForm::dgv1_SelectionChanged);
 			this->dataGridView2->KeyDown += gcnew System::Windows::Forms::KeyEventHandler(this, &MyForm::dgv1_KeyDown);
+			this->dataGridView2->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->dataGridView2->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// id2
 			// 
@@ -499,11 +543,12 @@ namespace Project1
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
 			this->panel1->Padding = System::Windows::Forms::Padding(3);
-			this->panel1->Size = System::Drawing::Size(1092, 437);
+			this->panel1->Size = System::Drawing::Size(1092, 411);
 			this->panel1->TabIndex = 31;
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->statusStrip1);
 			this->panel2->Controls->Add(this->label11);
 			this->panel2->Controls->Add(this->button6);
 			this->panel2->Controls->Add(this->numUpD_OldH);
@@ -540,10 +585,24 @@ namespace Project1
 			this->panel2->Dock = System::Windows::Forms::DockStyle::Bottom;
 			this->panel2->Font = (gcnew System::Drawing::Font(L"Tahoma", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
-			this->panel2->Location = System::Drawing::Point(0, 437);
+			this->panel2->Location = System::Drawing::Point(0, 411);
 			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(1092, 265);
+			this->panel2->Size = System::Drawing::Size(1092, 280);
 			this->panel2->TabIndex = 32;
+			// 
+			// statusStrip1
+			// 
+			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->toolStripStatusLabel1});
+			this->statusStrip1->Location = System::Drawing::Point(0, 258);
+			this->statusStrip1->Name = L"statusStrip1";
+			this->statusStrip1->Size = System::Drawing::Size(1092, 22);
+			this->statusStrip1->TabIndex = 46;
+			// 
+			// toolStripStatusLabel1
+			// 
+			this->toolStripStatusLabel1->Name = L"toolStripStatusLabel1";
+			this->toolStripStatusLabel1->Size = System::Drawing::Size(118, 17);
+			this->toolStripStatusLabel1->Text = L"toolStripStatusLabel1";
 			// 
 			// label11
 			// 
@@ -556,6 +615,7 @@ namespace Project1
 			// 
 			// button6
 			// 
+			this->button6->AccessibleDescription = L"Reposition only selected window";
 			this->button6->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->button6->Location = System::Drawing::Point(263, 70);
@@ -565,6 +625,8 @@ namespace Project1
 			this->button6->Text = L"Move To...";
 			this->button6->UseVisualStyleBackColor = true;
 			this->button6->Click += gcnew System::EventHandler(this, &MyForm::button6_Click);
+			this->button6->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->button6->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// numUpD_OldH
 			// 
@@ -642,8 +704,7 @@ namespace Project1
 			// 
 			// numUpD_NewW
 			// 
-			this->numUpD_NewW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
+			this->numUpD_NewW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->numUpD_NewW->Location = System::Drawing::Point(157, 88);
 			this->numUpD_NewW->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
 			this->numUpD_NewW->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
@@ -658,8 +719,7 @@ namespace Project1
 			// numUpD_OldX
 			// 
 			this->numUpD_OldX->Enabled = false;
-			this->numUpD_OldX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
+			this->numUpD_OldX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->numUpD_OldX->Location = System::Drawing::Point(51, 35);
 			this->numUpD_OldX->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
 			this->numUpD_OldX->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
@@ -673,6 +733,7 @@ namespace Project1
 			// 
 			// cB_Path
 			// 
+			this->cB_Path->AccessibleDescription = L"If checked, comparison \"CONTAINS\" is performed (you can use wildcards). If unchec" L"ked, comparison \"EQUALS\" is performed";
 			this->cB_Path->Location = System::Drawing::Point(1052, 232);
 			this->cB_Path->Name = L"cB_Path";
 			this->cB_Path->Size = System::Drawing::Size(15, 15);
@@ -680,11 +741,12 @@ namespace Project1
 			this->cB_Path->Tag = L"2";
 			this->cB_Path->UseVisualStyleBackColor = true;
 			this->cB_Path->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
+			this->cB_Path->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->cB_Path->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// numUpD_NewY
 			// 
-			this->numUpD_NewY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
-				static_cast<System::Byte>(204)));
+			this->numUpD_NewY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->numUpD_NewY->Location = System::Drawing::Point(157, 62);
 			this->numUpD_NewY->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
 			this->numUpD_NewY->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
@@ -698,6 +760,8 @@ namespace Project1
 			// 
 			// cB_Class
 			// 
+			this->cB_Class->AccessibleDescription = L"If checked, comparison \"CONTAINS\" is performed (you can use wildcards). If unchec" 
+				L"ked, comparison \"EQUALS\" is performed";
 			this->cB_Class->Location = System::Drawing::Point(1052, 206);
 			this->cB_Class->Name = L"cB_Class";
 			this->cB_Class->Size = System::Drawing::Size(15, 15);
@@ -705,9 +769,13 @@ namespace Project1
 			this->cB_Class->Tag = L"1";
 			this->cB_Class->UseVisualStyleBackColor = true;
 			this->cB_Class->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
+			this->cB_Class->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->cB_Class->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// cB_Title
 			// 
+			this->cB_Title->AccessibleDescription = L"If checked, comparison \"CONTAINS\" is performed (you can use wildcards). If unchec" 
+				L"ked, comparison \"EQUALS\" is performed";
 			this->cB_Title->Location = System::Drawing::Point(1052, 180);
 			this->cB_Title->Name = L"cB_Title";
 			this->cB_Title->Size = System::Drawing::Size(15, 15);
@@ -715,6 +783,8 @@ namespace Project1
 			this->cB_Title->Tag = L"0";
 			this->cB_Title->UseVisualStyleBackColor = true;
 			this->cB_Title->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_CustomText_Changed);
+			this->cB_Title->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->cB_Title->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// numUpD_NewX
 			// 
@@ -733,6 +803,7 @@ namespace Project1
 			// 
 			// cB_isIconic
 			// 
+			this->cB_isIconic->AccessibleDescription = L"If checked, the window will be minimized after repositioning";
 			this->cB_isIconic->AutoSize = true;
 			this->cB_isIconic->Location = System::Drawing::Point(51, 156);
 			this->cB_isIconic->Name = L"cB_isIconic";
@@ -741,9 +812,12 @@ namespace Project1
 			this->cB_isIconic->Text = L"Window is Minimized";
 			this->cB_isIconic->UseVisualStyleBackColor = true;
 			this->cB_isIconic->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_isIconic_CheckedChanged);
+			this->cB_isIconic->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->cB_isIconic->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// cB_Show_Invis
 			// 
+			this->cB_Show_Invis->AccessibleDescription = L"If checked, invisible windows will also be displayed";
 			this->cB_Show_Invis->Location = System::Drawing::Point(926, 6);
 			this->cB_Show_Invis->Name = L"cB_Show_Invis";
 			this->cB_Show_Invis->Size = System::Drawing::Size(154, 24);
@@ -751,12 +825,14 @@ namespace Project1
 			this->cB_Show_Invis->Text = L"Show Invisible Windows";
 			this->cB_Show_Invis->UseVisualStyleBackColor = true;
 			this->cB_Show_Invis->CheckedChanged += gcnew System::EventHandler(this, &MyForm::cB_Show_Invis_CheckedChanged);
+			this->cB_Show_Invis->MouseLeave += gcnew System::EventHandler(this, &MyForm::control_MouseLeave);
+			this->cB_Show_Invis->MouseHover += gcnew System::EventHandler(this, &MyForm::control_MouseHover);
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1092, 702);
+			this->ClientSize = System::Drawing::Size(1092, 691);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel2);
 			this->DoubleBuffered = true;
@@ -781,6 +857,8 @@ namespace Project1
 			this->panel1->ResumeLayout(false);
 			this->panel2->ResumeLayout(false);
 			this->panel2->PerformLayout();
+			this->statusStrip1->ResumeLayout(false);
+			this->statusStrip1->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldH))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_NewH))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->numUpD_OldW))->EndInit();
@@ -836,6 +914,8 @@ TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		Void	tB_Filter_TextChanged			(Object^, EventArgs^			);	// Filtering grid1
 		Void	tB_Filter1_Enter				(Object^, EventArgs^			);	// Enter Event for a Filter Text Box
 		Void	tB_Filter1_Leave				(Object^, EventArgs^			);	// Leave Event for a Filter Text Box
+		Void	control_MouseHover				(Object^, EventArgs^			);	// Mouse hover event
+		Void	control_MouseLeave				(Object^, EventArgs^			);	// Mouse leave event
 	};
 
 	#undef TMPLT

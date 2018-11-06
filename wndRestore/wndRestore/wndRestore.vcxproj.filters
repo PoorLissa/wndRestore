@@ -18,7 +18,7 @@
     <ClCompile Include="MyForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="lalala.cpp">
+    <ClCompile Include="myApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -26,10 +26,10 @@
     <ClInclude Include="MyForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="lalala.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="myApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

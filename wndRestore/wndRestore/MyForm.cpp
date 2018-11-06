@@ -1254,6 +1254,56 @@ namespace Project1
 
 		return;
 	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Mouse hover event
+	Void MyForm::control_MouseHover(Object^ sender, EventArgs^ e)
+	{
+		String ^str("");
+
+		// Get control's Description
+		do {
+			
+			Type ^t = sender->GetType();
+			
+			if( t == Button::typeid )
+			{
+				str = static_cast<Button^>(sender)->AccessibleDescription;
+				break;
+			}
+
+			if( t == TextBox::typeid )
+			{
+				str = static_cast<TextBox^>(sender)->AccessibleDescription;
+				break;
+			}
+
+			if( t == CheckBox::typeid )
+			{
+				str = static_cast<CheckBox^>(sender)->AccessibleDescription;
+				break;
+			}
+
+			if( t == DataGridView::typeid )
+			{
+				str = static_cast<DataGridView^>(sender)->AccessibleDescription;
+				break;
+			}
+			
+		}
+		while( false );
+
+		toolStripStatusLabel1->Text = str;
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Mouse leave event
+	Void MyForm::control_MouseLeave(Object^ sender, EventArgs^ e)
+	{
+		toolStripStatusLabel1->Text = "";
+	}
 
 }; // namespace Project1
 
