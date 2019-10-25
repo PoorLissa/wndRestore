@@ -37,14 +37,16 @@ namespace myApplication {
 		wndData() : 
 			xNew(defaultCoord), yNew(defaultCoord), wNew(defaultCoord), hNew(defaultCoord),
 			isChecked(false), isVisible(true), isIconic(false),
-			customTitle(false), customClass(false), customPath(false)
+			customTitle(false), customClass(false), customPath(false), customInst(false),
+			instanceNo(-1)
 		{
 		}
 
 		myString	windowTitle, windowClass, fullExeName, shortExeName, windowTitleOrig, windowClassOrig, fullExeNameOrig;
 		HWND		hWnd;
-		int			X, Y, W, H, index, xNew, yNew, wNew, hNew;
-		bool		isChecked, isVisible, isIconic, customTitle, customClass, customPath, isChanged;
+		int			X, Y, W, H, index, xNew, yNew, wNew, hNew, instanceNo;
+		bool		isChecked, isVisible, isIconic, customTitle, customClass, customPath, customInst, isChanged;
+		FILETIME	fileTime;
 	};
 
 	// -----------------------------------------------------------------------------------------------------------------------
@@ -52,7 +54,7 @@ namespace myApplication {
 	struct iniData
 	{
 		iniData() :
-			isIconic(false), customTitle(false), customClass(false), customPath(false)
+			isIconic(false), customTitle(false), customClass(false), customPath(false), customInst(false)
 		{
 		}
 
@@ -69,11 +71,12 @@ namespace myApplication {
 			customTitle  = false;
 			customClass  = false;
 			customPath   = false;
+			customInst	 = false;
 		}
 
 		myString	Title, Path, Class, exeName;
-		int			X, Y, W, H;
-		bool	    isChecked, isFound, isIconic, customTitle, customClass, customPath;
+		int			X, Y, W, H, instanceNo;
+		bool	    isChecked, isFound, isIconic, customTitle, customClass, customPath, customInst;
 	};
 
 	// -----------------------------------------------------------------------------------------------------------------------

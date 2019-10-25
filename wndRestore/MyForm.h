@@ -65,6 +65,9 @@ namespace Project1
 		System::Windows::Forms::Label		^label11;
 	private: System::Windows::Forms::StatusStrip^  statusStrip1;
 	private: System::Windows::Forms::ToolStripStatusLabel^  toolStripStatusLabel1;
+	private: System::Windows::Forms::TextBox^  tB_InstanceNo;
+
+	private: System::Windows::Forms::CheckBox^  cB_Instance;
 
 			 System::ComponentModel::Container	^components;
 	
@@ -109,6 +112,8 @@ namespace Project1
 			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->cB_Instance = (gcnew System::Windows::Forms::CheckBox());
+			this->tB_InstanceNo = (gcnew System::Windows::Forms::TextBox());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
 			this->toolStripStatusLabel1 = (gcnew System::Windows::Forms::ToolStripStatusLabel());
 			this->label11 = (gcnew System::Windows::Forms::Label());
@@ -243,7 +248,7 @@ namespace Project1
 			this->dataGridView1->RowTemplate->Resizable = System::Windows::Forms::DataGridViewTriState::False;
 			this->dataGridView1->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->dataGridView1->ShowRowErrors = false;
-			this->dataGridView1->Size = System::Drawing::Size(1086, 263);
+			this->dataGridView1->Size = System::Drawing::Size(1086, 268);
 			this->dataGridView1->TabIndex = 7;
 			this->dataGridView1->Tag = L"0";
 			this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgv1_CellContentClick);
@@ -394,7 +399,8 @@ namespace Project1
 			// button4
 			// 
 			this->button4->AccessibleDescription = L"For selected window, set its current parameters";
-			this->button4->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->button4->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->button4->Location = System::Drawing::Point(263, 35);
 			this->button4->Name = L"button4";
 			this->button4->Size = System::Drawing::Size(171, 34);
@@ -408,7 +414,8 @@ namespace Project1
 			// button5
 			// 
 			this->button5->AccessibleDescription = L"Show selected window (buggy, try not to use yet)";
-			this->button5->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->button5->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->button5->Location = System::Drawing::Point(263, 105);
 			this->button5->Name = L"button5";
 			this->button5->Size = System::Drawing::Size(171, 34);
@@ -436,8 +443,8 @@ namespace Project1
 			// 
 			this->splitContainer1->Panel2->Controls->Add(this->dataGridView2);
 			this->splitContainer1->Panel2MinSize = 100;
-			this->splitContainer1->Size = System::Drawing::Size(1086, 405);
-			this->splitContainer1->SplitterDistance = 263;
+			this->splitContainer1->Size = System::Drawing::Size(1086, 414);
+			this->splitContainer1->SplitterDistance = 268;
 			this->splitContainer1->SplitterWidth = 7;
 			this->splitContainer1->TabIndex = 30;
 			this->splitContainer1->SplitterMoved += gcnew System::Windows::Forms::SplitterEventHandler(this, &MyForm::splitContainer1_SplitterMoved);
@@ -446,7 +453,8 @@ namespace Project1
 			// tB_Filter1
 			// 
 			this->tB_Filter1->AccessibleDescription = L"Type in custom text (can use wildcards) to filter out the windows";
-			this->tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 6, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->tB_Filter1->Location = System::Drawing::Point(799, 5);
 			this->tB_Filter1->MaximumSize = System::Drawing::Size(200, 17);
 			this->tB_Filter1->Name = L"tB_Filter1";
@@ -467,12 +475,14 @@ namespace Project1
 			this->dataGridView2->AllowUserToAddRows = false;
 			this->dataGridView2->AllowUserToDeleteRows = false;
 			this->dataGridView2->AllowUserToResizeRows = false;
-			dataGridViewCellStyle3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
+			dataGridViewCellStyle3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(233)), 
+				static_cast<System::Int32>(static_cast<System::Byte>(233)), static_cast<System::Int32>(static_cast<System::Byte>(233)));
 			this->dataGridView2->AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
 			this->dataGridView2->BackgroundColor = System::Drawing::SystemColors::ButtonHighlight;
 			dataGridViewCellStyle4->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
 			dataGridViewCellStyle4->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			dataGridViewCellStyle4->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			dataGridViewCellStyle4->ForeColor = System::Drawing::SystemColors::WindowText;
 			dataGridViewCellStyle4->SelectionBackColor = System::Drawing::SystemColors::Highlight;
 			dataGridViewCellStyle4->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
@@ -480,9 +490,11 @@ namespace Project1
 			this->dataGridView2->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this->dataGridView2->ColumnHeadersHeight = 25;
 			this->dataGridView2->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::DisableResizing;
-			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, this->dataGridViewTextBoxColumn3});
+			this->dataGridView2->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {this->id2, this->dataGridViewTextBoxColumn2, 
+				this->dataGridViewTextBoxColumn3});
 			this->dataGridView2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->dataGridView2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->dataGridView2->Font = (gcnew System::Drawing::Font(L"Tahoma", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->dataGridView2->GridColor = System::Drawing::SystemColors::ButtonShadow;
 			this->dataGridView2->Location = System::Drawing::Point(0, 0);
 			this->dataGridView2->MultiSelect = false;
@@ -494,7 +506,7 @@ namespace Project1
 			this->dataGridView2->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
 			this->dataGridView2->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->dataGridView2->ShowRowErrors = false;
-			this->dataGridView2->Size = System::Drawing::Size(1086, 135);
+			this->dataGridView2->Size = System::Drawing::Size(1086, 139);
 			this->dataGridView2->TabIndex = 8;
 			this->dataGridView2->Tag = L"1";
 			this->dataGridView2->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MyForm::dgv1_CellContentClick);
@@ -536,11 +548,13 @@ namespace Project1
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
 			this->panel1->Padding = System::Windows::Forms::Padding(3);
-			this->panel1->Size = System::Drawing::Size(1092, 411);
+			this->panel1->Size = System::Drawing::Size(1092, 420);
 			this->panel1->TabIndex = 31;
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->cB_Instance);
+			this->panel2->Controls->Add(this->tB_InstanceNo);
 			this->panel2->Controls->Add(this->statusStrip1);
 			this->panel2->Controls->Add(this->label11);
 			this->panel2->Controls->Add(this->button6);
@@ -576,16 +590,38 @@ namespace Project1
 			this->panel2->Controls->Add(this->label1);
 			this->panel2->Controls->Add(this->label2);
 			this->panel2->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->panel2->Font = (gcnew System::Drawing::Font(L"Tahoma", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			this->panel2->Location = System::Drawing::Point(0, 411);
+			this->panel2->Font = (gcnew System::Drawing::Font(L"Tahoma", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->panel2->Location = System::Drawing::Point(0, 420);
 			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(1092, 280);
+			this->panel2->Size = System::Drawing::Size(1092, 311);
 			this->panel2->TabIndex = 32;
+			// 
+			// cB_Instance
+			// 
+			this->cB_Instance->AccessibleDescription = L"If checked, comparison \"CONTAINS\" is performed (you can use wildcards). If unchec" 
+				L"ked, comparison \"EQUALS\" is performed";
+			this->cB_Instance->Location = System::Drawing::Point(1052, 259);
+			this->cB_Instance->Name = L"cB_Instance";
+			this->cB_Instance->Size = System::Drawing::Size(15, 15);
+			this->cB_Instance->TabIndex = 48;
+			this->cB_Instance->Tag = L"3";
+			this->cB_Instance->UseVisualStyleBackColor = true;
+			// 
+			// tB_InstanceNo
+			// 
+			this->tB_InstanceNo->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->tB_InstanceNo->Location = System::Drawing::Point(51, 254);
+			this->tB_InstanceNo->Name = L"tB_InstanceNo";
+			this->tB_InstanceNo->ReadOnly = true;
+			this->tB_InstanceNo->Size = System::Drawing::Size(977, 24);
+			this->tB_InstanceNo->TabIndex = 47;
 			// 
 			// statusStrip1
 			// 
 			this->statusStrip1->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) {this->toolStripStatusLabel1});
-			this->statusStrip1->Location = System::Drawing::Point(0, 258);
+			this->statusStrip1->Location = System::Drawing::Point(0, 289);
 			this->statusStrip1->Name = L"statusStrip1";
 			this->statusStrip1->Size = System::Drawing::Size(1092, 22);
 			this->statusStrip1->TabIndex = 46;
@@ -696,7 +732,8 @@ namespace Project1
 			// 
 			// numUpD_NewW
 			// 
-			this->numUpD_NewW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->numUpD_NewW->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->numUpD_NewW->Location = System::Drawing::Point(157, 88);
 			this->numUpD_NewW->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
 			this->numUpD_NewW->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
@@ -711,7 +748,8 @@ namespace Project1
 			// numUpD_OldX
 			// 
 			this->numUpD_OldX->Enabled = false;
-			this->numUpD_OldX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->numUpD_OldX->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->numUpD_OldX->Location = System::Drawing::Point(51, 35);
 			this->numUpD_OldX->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
 			this->numUpD_OldX->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
@@ -725,7 +763,8 @@ namespace Project1
 			// 
 			// cB_Path
 			// 
-			this->cB_Path->AccessibleDescription = L"If checked, comparison \"CONTAINS\" is performed (you can use wildcards). If unchec" L"ked, comparison \"EQUALS\" is performed";
+			this->cB_Path->AccessibleDescription = L"If checked, comparison \"CONTAINS\" is performed (you can use wildcards). If unchec" 
+				L"ked, comparison \"EQUALS\" is performed";
 			this->cB_Path->Location = System::Drawing::Point(1052, 232);
 			this->cB_Path->Name = L"cB_Path";
 			this->cB_Path->Size = System::Drawing::Size(15, 15);
@@ -738,7 +777,8 @@ namespace Project1
 			// 
 			// numUpD_NewY
 			// 
-			this->numUpD_NewY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->numUpD_NewY->Font = (gcnew System::Drawing::Font(L"Tahoma", 10, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
 			this->numUpD_NewY->Location = System::Drawing::Point(157, 62);
 			this->numUpD_NewY->Maximum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, 0});
 			this->numUpD_NewY->Minimum = System::Decimal(gcnew cli::array< System::Int32 >(4) {25000, 0, 0, System::Int32::MinValue});
@@ -824,7 +864,7 @@ namespace Project1
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1092, 691);
+			this->ClientSize = System::Drawing::Size(1092, 731);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->panel2);
 			this->DoubleBuffered = true;

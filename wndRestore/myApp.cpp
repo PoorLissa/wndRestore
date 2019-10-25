@@ -12,6 +12,19 @@ namespace myApplication
 
 	// ----------------------------------------------------------------------------------------------------------------
 
+	// Global LESS operator for FILETIME
+	inline bool operator < (const FILETIME &a, const FILETIME &b)
+	{
+		if( a.dwHighDateTime != b.dwHighDateTime )
+		{
+			return (a.dwHighDateTime < b.dwHighDateTime);
+		}
+		else
+		{
+			return (a.dwLowDateTime < b.dwLowDateTime);
+		}
+	}
+
 	// Global callback function for a EnumWindows(). Made it global, since it was impossible to make it a member of a class
 	BOOL CALLBACK enumWindowsProc(HWND hWnd, LPARAM lParam)
 	{
@@ -137,7 +150,7 @@ namespace myApplication
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
-	// Get sorted list of currently existing proper windows
+	// Get sorted list of currently existing proper windows (both visible and invisible)
 	void appMain::getWindows()
 	{
 		auto *vec = &vec_data;
@@ -146,15 +159,32 @@ namespace myApplication
 
 		EnumWindows(enumWindowsProc, reinterpret_cast<LPARAM>(vec));
 
-		// Sort the list by exe name
-		std::sort(vec->begin(), vec->end(), [](const wndData &a, const wndData &b) { 
-												return a.shortExeName < b.shortExeName;
+		// Sort the list by: 1) exe name, 2) process start time (which will give us the instance number later)
+		std::sort(vec->begin(), vec->end(), [](const wndData &a, const wndData &b) {
+
+												return (a.shortExeName == b.shortExeName)
+															? ( a.fileTime	   < b.fileTime		)
+															: ( a.shortExeName < b.shortExeName );
 											}
 		);
 
 		// Add unique index to each entry
 		for(UINT i = 0; i < vec->size(); i++)
-			vec->at(i).index = i;
+		{
+			wndData *iter = &vec->at(i);
+			iter->instanceNo = 1;
+
+			if( i > 0 )
+			{
+				wndData *prev = &vec->at(i-1);
+
+				// If exe file is present more than once, set InstanceNo depending on the running time of the process (the longer it has been running, the lower instNo)
+				if( iter->shortExeName == prev->shortExeName )
+					iter->instanceNo = prev->instanceNo + 1;
+			}
+
+			iter->index = i;
+		}
 
 		return;
 	}
@@ -270,6 +300,13 @@ namespace myApplication
 								break;
 							}
 
+							if( lineName == "[InstanceNo]" )
+							{
+								std::istringstream iss(lineData);
+								iss >> ini.instanceNo;
+								break;
+							}
+
 							if( lineName == "[customTitle]" )
 							{
 								std::istringstream iss(lineData);
@@ -288,6 +325,13 @@ namespace myApplication
 							{
 								std::istringstream iss(lineData);
 								ini.customPath = (lineData == "Yes");
+								break;
+							}
+
+							if( lineName == "[customInst]" )
+							{
+								std::istringstream iss(lineData);
+								ini.customInst = (lineData == "Yes");
 								break;
 							}
 
@@ -396,7 +440,16 @@ namespace myApplication
 						}
 						else
 						{
-							found = (dat->windowTitle== ini->Title);
+							found = (dat->windowTitle == ini->Title);
+						}
+					}
+
+					// check Instance Number (only needs checking if the according checkbox is selected)
+					if( found )
+					{
+						if( ini->customInst )
+						{
+							found = (dat->instanceNo == ini->instanceNo);
 						}
 					}
 
@@ -413,6 +466,7 @@ namespace myApplication
 						dat->customTitle = ini->customTitle;
 						dat->customClass = ini->customClass;
 						dat->customPath	 = ini->customPath;
+						dat->customInst	 = ini->customInst;
 						dat->windowTitle = ini->Title;
 						dat->windowClass = ini->Class;
 						dat->fullExeName = ini->Path;
@@ -592,6 +646,7 @@ namespace myApplication
 				auto putStr     = [&file, this]	(const char *paramName, myString &data)				{ file << "[" << paramName << "]"  << getStr(data)							<< std::endl; };
 				auto putBool    = [&file]		(const char *paramName, bool	 &data)				{ file << "[" << paramName << "]"  << (data ? "Yes" : "No") 				<< std::endl; };
 				auto putStrExt  = [&file]		(const char *paramName, int x, int y, int w, int h)	{ file << "[" << paramName << "] " << x << " " << y << " " << w << " " << h << std::endl; };
+				auto putInt		= [&file]		(const char *paramName, int i)						{ file << "[" << paramName << "] " << i										<< std::endl; };
 
 				// data
 				{
@@ -612,7 +667,9 @@ namespace myApplication
 							putBool  ("customTitle",   data->customTitle							 );
 							putBool  ("customClass",   data->customClass							 );
 							putBool	 ("customPath",	   data->customPath								 );
+							putBool	 ("customInst",	   data->customInst								 );
 							putStrExt("Coords",		   data->xNew, data->yNew, data->wNew, data->hNew);
+							putInt	 ("InstanceNo",	   data->instanceNo								 );
 
 							file << std::endl;
 						}
@@ -638,7 +695,9 @@ namespace myApplication
 							putBool	 ("customTitle",   ini->customTitle				 );
 							putBool	 ("customClass",   ini->customClass				 );
 							putBool	 ("customPath",	   ini->customPath				 );
+							putBool	 ("customInst",	   ini->customInst				 );
 							putStrExt("Coords",		   ini->X, ini->Y, ini->W, ini->H);
+							putInt	 ("InstanceNo",	   ini->instanceNo);
 
 							file << std::endl;
 						}
@@ -697,12 +756,21 @@ namespace myApplication
 						pos1++;
 					}
 
-					data.fullExeName  = myString(&exe_name[0],    &exe_name[pos1]);
+					data.fullExeName  = myString(&exe_name[0], &exe_name[pos1]);
 
 					std::transform(data.fullExeName.begin(), data.fullExeName.end(), data.fullExeName.begin(), ::tolower);
 
 					data.shortExeName = myString(&exe_name[pos2], &exe_name[pos1]);
 					data.windowClass  = wndClass;
+
+					// Remember process creation time
+					{
+						FILETIME fProcessTime, ftExit, ftKernel, ftUser;							// this variables for get process start time and etc
+						GetProcessTimes(handle, &fProcessTime, &ftExit, &ftKernel, &ftUser);		// Get process time
+						data.fileTime = fProcessTime;
+
+						data.instanceNo = fProcessTime.dwLowDateTime / 10;
+					}
 
 					CloseHandle(handle);
 				}

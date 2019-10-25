@@ -167,6 +167,7 @@ namespace Project1
 							tB_Title->Text = gcnew String(data->windowTitle.c_str());
 							tB_Class->Text = gcnew String(data->windowClass.c_str());
  							 tB_Path->Text = gcnew String(data->fullExeName.c_str());
+					   tB_InstanceNo->Text = gcnew String(data->instanceNo.ToString());
 
 							numUpD_OldX->Text = gcnew String(data->X.ToString());
 							numUpD_OldY->Text = gcnew String(data->Y.ToString());
@@ -182,6 +183,7 @@ namespace Project1
 							   cB_Title->Checked = data->customTitle;
 							   cB_Class->Checked = data->customClass;
 								cB_Path->Checked = data->customPath;
+							cB_Instance->Checked = data->customInst;
 
 							if( data->windowTitle != data->windowTitleOrig )
 								tb_title_color = changedColor;
@@ -214,6 +216,7 @@ namespace Project1
 							tB_Title->Text = gcnew String(ini->Title.c_str());
 							tB_Class->Text = gcnew String(ini->Class.c_str());
  							 tB_Path->Text = gcnew String(ini->Path .c_str());
+					   tB_InstanceNo->Text = gcnew String(ini->instanceNo.ToString());
 
 							numUpD_NewX->Text = gcnew String(ini->X.ToString());
 							numUpD_NewY->Text = gcnew String(ini->Y.ToString());
@@ -229,6 +232,7 @@ namespace Project1
 							   cB_Title->Checked = ini->customTitle;
 							   cB_Class->Checked = ini->customClass;
 								cB_Path->Checked = ini->customPath;
+							cB_Instance->Checked = ini->customInst;
 						}
 
 					}
@@ -260,6 +264,7 @@ namespace Project1
 		   cB_Title->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 		   cB_Class->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 		    cB_Path->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
+		cB_Instance->CheckedChanged += gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 
 		return;
 	}
@@ -1011,6 +1016,10 @@ namespace Project1
 
 				case 2:
 					value = &(gridTag ? myApplication::vec_ini[idx].customPath  : myApplication::vec_data[idx].customPath );
+					break;
+
+				case 3:
+					value = &(gridTag ? myApplication::vec_ini[idx].customInst  : myApplication::vec_data[idx].customInst );
 					break;
 			}
 
