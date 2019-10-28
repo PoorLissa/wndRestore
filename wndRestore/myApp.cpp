@@ -722,7 +722,7 @@ namespace myApplication
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Get additional window information
-	void appMain::getWindowInfo(wndData &data, char mode)
+	void appMain::getWindowInfo(wndData &data, char mode /*default=0*/)
 	{
 		RECT rect;
 
@@ -792,7 +792,7 @@ namespace myApplication
 
 					if( plc.showCmd == SW_SHOWMAXIMIZED )
 					{
-						// For a maximized window check it's left restored coordinate.
+						// For a maximized window, check its left restored coordinate.
 						// If it is < 0, then the window is originally located on the left monitor
 						if( plc.rcNormalPosition.left < 0 )
 						{
@@ -810,6 +810,46 @@ namespace myApplication
 						}
 					}
 				}
+			}
+
+			// Mode == 1 means we must obtain only window coordinates
+			if( mode == 1 )
+			{
+				// Check if the window is maximized
+				{
+					WINDOWPLACEMENT plc;
+					plc.length = sizeof(WINDOWPLACEMENT);
+					GetWindowPlacement(data.hWnd, &plc);
+
+					// The window is maximized if it is really maximized...
+					//... or if it was maximized and then was minimized to taskbar
+					if( plc.showCmd == SW_SHOWMINIMIZED && data.isVisible )
+					{
+						ShowWindow(data.hWnd, SW_RESTORE);
+						GetWindowPlacement(data.hWnd, &plc);
+						ShowWindow(data.hWnd, SW_SHOWMINIMIZED);
+					}
+
+					if( plc.showCmd == SW_SHOWMAXIMIZED )
+					{
+						// For a maximized window, check its left restored coordinate.
+						// If it is < 0, then the window is originally located on the left monitor
+						if( plc.rcNormalPosition.left < 0 )
+						{
+							rect.left   = -1;
+							rect.right  =  0;
+							rect.top    =  1;
+							rect.bottom =  2;
+						}
+						else
+						{
+							rect.left   = 1;
+							rect.right  = 2;
+							rect.top    = 1;
+							rect.bottom = 2;
+						}
+					}
+				}			
 			}
 
 			// Get original window position and coordinates

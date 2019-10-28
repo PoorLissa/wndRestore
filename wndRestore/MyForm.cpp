@@ -788,8 +788,10 @@ namespace Project1
 			{
 				myApplication::wndData *data = &(myApplication::vec_data[idx]);
 
-				myApplication::appMain::getWindowInfo(*data);
+				// get only current coordinates
+				myApplication::appMain::getWindowInfo(*data, 1);
 
+#if 0
 				{
 					std::vector<myApplication::wndData> vec;
 
@@ -797,7 +799,7 @@ namespace Project1
 
 					data->windowTitle = vec[0].windowTitle;
 				}
-
+#endif
 				setTextData(tag, idx);
 			}
 		}
