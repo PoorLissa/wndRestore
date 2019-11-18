@@ -159,12 +159,19 @@ namespace myApplication
 
 		EnumWindows(enumWindowsProc, reinterpret_cast<LPARAM>(vec));
 
-		// Sort the list by: 1) exe name, 2) process start time (which will give us the instance number later)
+		// Sort the list by: 1) exe name
+		//					 2) process start time (which will give us the instance number later)
+		//					 3) process visibility (visible goes first)
 		std::sort(vec->begin(), vec->end(), [](const wndData &a, const wndData &b) {
 
+												bool bTime		= a.fileTime	 < b.fileTime;
+												bool bShortName = a.shortExeName < b.shortExeName;
+
 												return (a.shortExeName == b.shortExeName)
-															? ( a.fileTime	   < b.fileTime		)
-															: ( a.shortExeName < b.shortExeName );
+															? (
+																a.isVisible == b.isVisible ? bTime : a.isVisible
+															  )
+															: bShortName;
 											}
 		);
 
@@ -173,6 +180,7 @@ namespace myApplication
 		{
 			wndData *iter = &vec->at(i);
 			iter->instanceNo = 1;
+			iter->index		 = i;
 
 			if( i > 0 )
 			{
@@ -182,8 +190,6 @@ namespace myApplication
 				if( iter->shortExeName == prev->shortExeName )
 					iter->instanceNo = prev->instanceNo + 1;
 			}
-
-			iter->index = i;
 		}
 
 		return;
