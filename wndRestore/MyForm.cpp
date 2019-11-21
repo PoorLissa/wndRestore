@@ -3,6 +3,9 @@
 using namespace System;
 using namespace System::Windows::Forms;
 
+using namespace System::Security::Principal;
+using namespace System::Diagnostics;
+
 // =======================================================================================================================
 
 [STAThread]
@@ -23,7 +26,19 @@ void Main(array<String^>^ args)
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
 
+	// Check if the application is running in administrator mode
+	WindowsIdentity  ^identity  = WindowsIdentity::GetCurrent();
+	WindowsPrincipal ^principal = gcnew WindowsPrincipal(identity);
+
+	myApplication::isAdmin = principal->IsInRole(WindowsBuiltInRole::Administrator);
+
 	Project1::MyForm form;
+
+	if( myApplication::isAdmin )
+	{
+		form.Text = form.Text + " -- Administrator";
+	}
+
 	Application::Run(%form);
 }
 
@@ -68,7 +83,35 @@ namespace Project1
 
 		return;
 	}
-	// ----------------------------------------------------------------------------------------------------------------\
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Restart application with elevated privileges
+	void MyForm::restartAsAdmin()
+	{
+		if( !myApplication::isAdmin )
+		{
+			ProcessStartInfo ^proc = gcnew ProcessStartInfo();
+
+            proc->UseShellExecute  = true;
+            proc->WorkingDirectory = Environment::CurrentDirectory;
+            proc->FileName		   = Application::ExecutablePath;
+            proc->Verb			   = "runas";
+
+            try
+            {
+				Process::Start(proc);
+				Application::Exit();
+			}
+            catch(...)
+            {
+				// The user refused the elevation: do nothing
+				MessageBox::Show("You have refused the elevation", "Nothing changed");
+			}
+		}
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
 
 	// Get pointer to the active grid
 	DataGridView^ MyForm::getActiveGrid()
@@ -273,11 +316,16 @@ namespace Project1
 	// Reposition selected windows
 	Void MyForm::button1_Click(Object^ sender, EventArgs^ e)
 	{
-		cpp_app.repositionWindows();
-
-		// In case main window gets covered by other windows, make it visible again
-		HWND hWnd = static_cast<HWND>(Handle.ToPointer());
-		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		if( !cpp_app.repositionWindows() )
+		{
+			// In case main window gets covered by other windows, make it visible again
+			HWND hWnd = static_cast<HWND>(Handle.ToPointer());
+			SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		}
+		else
+		{
+			restartAsAdmin();
+		}
 
 		return;
 	}

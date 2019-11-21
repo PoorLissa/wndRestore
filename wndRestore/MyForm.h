@@ -921,6 +921,7 @@ TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		void	setActiveGrid					(DGV ^, int &, int &			);	// Set active grid
 		void	setGridColors					(DGV ^, DGV ^					);	// Set colors for active and inactive grids
 		void	init_MyForm						();									// Initialization for MyForm Constructor
+		void	restartAsAdmin					();									// Restart application with elevated privileges
 		void	renewPhysicalData				();									// Get all the data from Windows and from ini-file
 		void	redrawGridData					();									// Clear the grids and put the data in there again
 		DGV^	getActiveGrid					();									// Get pointer to the active grid

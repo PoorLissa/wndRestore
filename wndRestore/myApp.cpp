@@ -2,6 +2,8 @@
 #include <regex>
 #include <tlhelp32.h>
 
+#pragma comment(lib, "SHELL32.LIB")
+
 // =======================================================================================================================
 
 namespace myApplication
@@ -25,7 +27,8 @@ namespace myApplication
 		}
 	}
 
-	// Global callback function for a EnumWindows(). Made it global, since it was impossible to make it a member of a class
+	// Global callback function for a EnumWindows()
+	// Made it global, since it was impossible to make it a member of a class
 	BOOL CALLBACK enumWindowsProc(HWND hWnd, LPARAM lParam)
 	{
 		if( IsWindow(hWnd) )
@@ -490,7 +493,7 @@ namespace myApplication
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Move selected windows to their corresponding positions
-	void appMain::repositionWindows(const int id /*default=-1*/)
+	int appMain::repositionWindows(const int id /*default=-1*/)
 	{
 		auto isMaximized = [](wndData *data) {
 
@@ -500,6 +503,9 @@ namespace myApplication
 
 			return plc.showCmd == SW_SHOWMAXIMIZED;
 		};
+
+		unsigned int accessDeniedCnt = 0;
+		int res = 0;
 
 		for(UINT i = 0; i < vec_data.size(); i++)
 		{
@@ -511,54 +517,79 @@ namespace myApplication
 				{
 					if( IsWindow(dat->hWnd) )
 					{
-						do
+						// Do nothing if the window is already at its desired coordinates
+						if( dat->X != dat->xNew || dat->Y != dat->yNew || dat->H != dat->hNew || dat->W != dat->wNew )
 						{
-							// Iconic window must be reduced to (tray) icon
-							if( dat->isIconic )
+							do
 							{
-								ShowWindow(dat->hWnd, SW_HIDE);
-								SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
-								break;
-							}
-
-							// Window [1, 1, 1, 1] will be maximized on the primary monitor
-							if( dat->xNew == 1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
-							{
-								if( !isMaximized(dat) )
+								// Iconic window must be reduced to (tray) icon
+								if( dat->isIconic )
 								{
-									SetWindowPos(dat->hWnd, HWND_TOP, 100, 100, 800, 600, 0);
-									ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+									ShowWindow(dat->hWnd, SW_HIDE);
+									SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
+									break;
 								}
 
-								break;
-							}
-
-							// Window [-1, 1, 1, 1] will be maximized on the left monitor
-							if( dat->xNew == -1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
-							{
-								if( !isMaximized(dat) )
+								// Window [1, 1, 1, 1] will be maximized on the primary monitor
+								if( dat->xNew == 1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
 								{
-									SetWindowPos(dat->hWnd, HWND_TOP, -850, 100, 800, 600, 0);
-									ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+									if( !isMaximized(dat) )
+									{
+										SetWindowPos(dat->hWnd, HWND_TOP, 100, 100, 800, 600, 0);
+										ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+									}
+
+									break;
 								}
 
-								break;
-							}
+								// Window [-1, 1, 1, 1] will be maximized on the left monitor
+								if( dat->xNew == -1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
+								{
+									if( !isMaximized(dat) )
+									{
+										SetWindowPos(dat->hWnd, HWND_TOP, -850, 100, 800, 600, 0);
+										ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
+									}
 
-							// Other windows will be shown as they are
-							{
-								ShowWindow(dat->hWnd, SW_RESTORE);
-								SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
-								break;
-							}
+									break;
+								}
 
-						} while(false);
+								// Other windows will be shown as they are
+								{
+									ShowWindow(dat->hWnd, SW_RESTORE);
+									BOOL isOk = SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
+
+									// See if SetWindowPos failed due to the insufficiend privileges
+									if ( !isOk && !isAdmin && GetLastError() == ERROR_ACCESS_DENIED )
+										accessDeniedCnt++;
+
+									break;
+								}
+
+							} while(false);
+						}
 					}
 				}
 			}
 		}
+
+		// Some windows were not repositioned
+		if( accessDeniedCnt )
+		{
+			auto Res = System::Windows::Forms::MessageBox::Show("One or more process windows failed to reposition."
+																"\n\n"
+																"Do you want to restart the program in administrator mode and try again?", "Attention",
+																	System::Windows::Forms::MessageBoxButtons::YesNo,
+																	System::Windows::Forms::MessageBoxIcon::Question
+			);
+
+			if( Res == System::Windows::Forms::DialogResult::Yes )
+			{
+				res = 1;
+			}
+		}
 	
-		return;
+		return res;
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 

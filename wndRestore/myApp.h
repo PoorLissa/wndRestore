@@ -27,6 +27,7 @@ namespace myApplication {
 
 	static bool	 initDone	   = false;
 	static bool	 isSilent      = false;
+	static bool	 isAdmin	   = false;
 	static short cBoxColumnNum = 3;
 	static short defaultCoord  = -12345;
 
@@ -96,7 +97,7 @@ static	void		getWindowInfo		(wndData &, char = 0);				// Get additional window i
 		void		getWindows			();									// Get sorted list of currently active windows with the info about them
 		int			read_ini_file		();									// Read data from the .ini-file
 		void		compare_wnd_and_ini ();									// Compare existing windows list with a list from .ini file
-		void		repositionWindows	(const int = -1);					// Move selected windows to their corresponding positions
+		int			repositionWindows	(const int = -1);					// Move selected windows to their corresponding positions
 		bool		save_ini			();									// Save data to ini-file
 		void		ViewWindow			(int);
 		void		setShowVisible		(bool);								// Set _showVisible flag to true/false
