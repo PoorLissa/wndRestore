@@ -90,22 +90,32 @@ namespace Project1
 	{
 		if( !myApplication::isAdmin )
 		{
-			ProcessStartInfo ^proc = gcnew ProcessStartInfo();
+			auto Res = System::Windows::Forms::MessageBox::Show("One or more process windows failed to reposition."
+																"\n\n"
+																"Do you want to restart the program in administrator mode and try again?", "Attention",
+																	System::Windows::Forms::MessageBoxButtons::YesNo,
+																	System::Windows::Forms::MessageBoxIcon::Question
+			);
 
-            proc->UseShellExecute  = true;
-            proc->WorkingDirectory = Environment::CurrentDirectory;
-            proc->FileName		   = Application::ExecutablePath;
-            proc->Verb			   = "runas";
+			if( Res == System::Windows::Forms::DialogResult::Yes )
+			{
+				ProcessStartInfo ^proc = gcnew ProcessStartInfo();
 
-            try
-            {
-				Process::Start(proc);
-				Application::Exit();
-			}
-            catch(...)
-            {
-				// The user refused the elevation: do nothing
-				MessageBox::Show("You have refused the elevation", "Nothing changed");
+				proc->UseShellExecute  = true;
+				proc->WorkingDirectory = Environment::CurrentDirectory;
+				proc->FileName		   = Application::ExecutablePath;
+				proc->Verb			   = "runas";
+
+				try
+				{
+					Process::Start(proc);
+					Application::Exit();
+				}
+				catch(...)
+				{
+					// The user refused the elevation: do nothing
+					MessageBox::Show("You have refused the elevation", "Nothing changed");
+				}
 			}
 		}
 
@@ -338,11 +348,16 @@ namespace Project1
 
 		if( tag == 0 )
 		{
-			cpp_app.repositionWindows(idx);
-
-			// In case main window gets covered by other windows, make it visible again
-			HWND hWnd = static_cast<HWND>(Handle.ToPointer());
-			SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+			if( !cpp_app.repositionWindows(idx) )
+			{
+				// In case main window gets covered by other windows, make it visible again
+				HWND hWnd = static_cast<HWND>(Handle.ToPointer());
+				SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+			}
+			else
+			{
+				restartAsAdmin();
+			}
 		}
 
 		return;

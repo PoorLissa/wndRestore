@@ -646,7 +646,7 @@ namespace Project1
 			// 
 			// button6
 			// 
-			this->button6->AccessibleDescription = L"Reposition only selected window";
+			this->button6->AccessibleDescription = L"Reposition single selected window";
 			this->button6->Font = (gcnew System::Drawing::Font(L"Tahoma", 15, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
 				static_cast<System::Byte>(204)));
 			this->button6->Location = System::Drawing::Point(263, 70);

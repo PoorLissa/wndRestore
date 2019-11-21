@@ -4,6 +4,12 @@
 
 #pragma comment(lib, "SHELL32.LIB")
 
+#define SWITCH()	do
+#define SWITCH_END	while(false)
+#define CASE(x)		if(x)  {
+#define BREAK		break; }
+#define DEFAULT		{
+
 // =======================================================================================================================
 
 namespace myApplication
@@ -273,78 +279,58 @@ namespace myApplication
 						std::string lineData = line.substr(pos, len - pos);
 
 						// switch by string
-						do {
-							
-							if( lineName == "[Title]" )
-							{
+						SWITCH()
+						{
+							CASE( lineName == "[Title]" )
 								ini.Title = getMyStr(lineData);
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[Path]" )
-							{
+							CASE( lineName == "[Path]" )
 								ini.Path = getMyStr(lineData);
 								int pos = ini.Path.find_last_of('\\') + 1;
 								ini.exeName = ini.Path.substr(pos, ini.Path.length() - pos);
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[Class]" )
-							{
+							CASE( lineName == "[Class]" )
 								ini.Class = getMyStr(lineData);
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[Coords]" )
-							{
+							CASE( lineName == "[Coords]" )
 								std::istringstream iss(lineData);
 								iss >> ini.X >> ini.Y >> ini.W >> ini.H;
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[Iconic]" )
-							{
+							CASE( lineName == "[Iconic]" )
 								std::istringstream iss(lineData);
 								ini.isIconic = (lineData == "Yes");
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[InstanceNo]" )
-							{
+							CASE( lineName == "[InstanceNo]" )
 								std::istringstream iss(lineData);
 								iss >> ini.instanceNo;
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[customTitle]" )
-							{
+							CASE( lineName == "[customTitle]" )
 								std::istringstream iss(lineData);
 								ini.customTitle = (lineData == "Yes");
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[customClass]" )
-							{
+							CASE( lineName == "[customClass]" )
 								std::istringstream iss(lineData);
 								ini.customClass = (lineData == "Yes");
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[customPath]" )
-							{
+							CASE( lineName == "[customPath]" )
 								std::istringstream iss(lineData);
 								ini.customPath = (lineData == "Yes");
-								break;
-							}
+								BREAK;
 
-							if( lineName == "[customInst]" )
-							{
+							CASE( lineName == "[customInst]" )
 								std::istringstream iss(lineData);
 								ini.customInst = (lineData == "Yes");
-								break;
-							}
+								BREAK;
 
-						} while(false);
+						} SWITCH_END;
 					}
 				}
 
@@ -492,9 +478,13 @@ namespace myApplication
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
-	// Move selected windows to their corresponding positions
+	// Move selected windows to their desired positions
+	// On success returns 0
+	// Otherwise returns the number of windows that failed to reposition. In this case the caller should request elevation of privileges or suffer the consequences
 	int appMain::repositionWindows(const int id /*default=-1*/)
 	{
+		int res = 0;
+
 		auto isMaximized = [](wndData *data) {
 
 			WINDOWPLACEMENT plc;
@@ -503,9 +493,6 @@ namespace myApplication
 
 			return plc.showCmd == SW_SHOWMAXIMIZED;
 		};
-
-		unsigned int accessDeniedCnt = 0;
-		int res = 0;
 
 		for(UINT i = 0; i < vec_data.size(); i++)
 		{
@@ -520,75 +507,53 @@ namespace myApplication
 						// Do nothing if the window is already at its desired coordinates
 						if( dat->X != dat->xNew || dat->Y != dat->yNew || dat->H != dat->hNew || dat->W != dat->wNew )
 						{
-							do
+							SWITCH()
 							{
 								// Iconic window must be reduced to (tray) icon
-								if( dat->isIconic )
-								{
+								CASE( dat->isIconic )
+
 									ShowWindow(dat->hWnd, SW_HIDE);
 									SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
-									break;
-								}
+									BREAK;
 
 								// Window [1, 1, 1, 1] will be maximized on the primary monitor
-								if( dat->xNew == 1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
-								{
+								CASE( dat->xNew == 1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
+
 									if( !isMaximized(dat) )
 									{
 										SetWindowPos(dat->hWnd, HWND_TOP, 100, 100, 800, 600, 0);
 										ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
 									}
-
-									break;
-								}
+									BREAK;
 
 								// Window [-1, 1, 1, 1] will be maximized on the left monitor
-								if( dat->xNew == -1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
-								{
+								CASE( dat->xNew == -1 && dat->yNew == 1 && dat->wNew == 1 && dat->hNew == 1 )
+
 									if( !isMaximized(dat) )
 									{
 										SetWindowPos(dat->hWnd, HWND_TOP, -850, 100, 800, 600, 0);
 										ShowWindow(dat->hWnd, SW_SHOWMAXIMIZED);
 									}
-
-									break;
-								}
+									BREAK;
 
 								// Other windows will be shown as they are
-								{
+								DEFAULT
+
 									ShowWindow(dat->hWnd, SW_RESTORE);
 									BOOL isOk = SetWindowPos(dat->hWnd, HWND_TOP, dat->xNew, dat->yNew, dat->wNew, dat->hNew, 0);
 
 									// See if SetWindowPos failed due to the insufficiend privileges
 									if ( !isOk && !isAdmin && GetLastError() == ERROR_ACCESS_DENIED )
-										accessDeniedCnt++;
+										res++;
+									BREAK;
 
-									break;
-								}
-
-							} while(false);
+							} SWITCH_END;
 						}
 					}
 				}
 			}
 		}
 
-		// Some windows were not repositioned
-		if( accessDeniedCnt )
-		{
-			auto Res = System::Windows::Forms::MessageBox::Show("One or more process windows failed to reposition."
-																"\n\n"
-																"Do you want to restart the program in administrator mode and try again?", "Attention",
-																	System::Windows::Forms::MessageBoxButtons::YesNo,
-																	System::Windows::Forms::MessageBoxIcon::Question
-			);
-
-			if( Res == System::Windows::Forms::DialogResult::Yes )
-			{
-				res = 1;
-			}
-		}
-	
 		return res;
 	}
 	// ----------------------------------------------------------------------------------------------------------------
