@@ -1,3 +1,5 @@
+// C++ logic
+
 #include "myApp.h"
 #include <regex>
 #include <tlhelp32.h>

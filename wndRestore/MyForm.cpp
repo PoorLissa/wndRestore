@@ -1,3 +1,5 @@
+// C# interface
+
 #include "MyForm.h"
 
 using namespace System;

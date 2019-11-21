@@ -1,3 +1,5 @@
+// C# interface
+
 #pragma once
 
 #include "myApp.h"
