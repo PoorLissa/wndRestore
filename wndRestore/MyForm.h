@@ -65,13 +65,15 @@ namespace Project1
 		System::Windows::Forms::Label		^label9;
 		System::Windows::Forms::Label		^label10;
 		System::Windows::Forms::Label		^label11;
-	private: System::Windows::Forms::StatusStrip^  statusStrip1;
-	private: System::Windows::Forms::ToolStripStatusLabel^  toolStripStatusLabel1;
-	private: System::Windows::Forms::TextBox^  tB_InstanceNo;
-
-	private: System::Windows::Forms::CheckBox^  cB_Instance;
-
-			 System::ComponentModel::Container	^components;
+		System::Windows::Forms::StatusStrip	^statusStrip1;
+		System::Windows::Forms::ToolStripStatusLabel^ toolStripStatusLabel1;
+		System::Windows::Forms::TextBox		^tB_InstanceNo;
+		System::Windows::Forms::CheckBox	^cB_Instance;
+		System::Windows::Forms::ComboBox	^comboBox1;
+		System::Windows::Forms::Button		^button8;
+		System::Windows::Forms::Button		^button7;
+		System::Windows::Forms::Button		^button9;
+		System::ComponentModel::Container	^components;
 	
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -114,6 +116,10 @@ namespace Project1
 			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->button9 = (gcnew System::Windows::Forms::Button());
+			this->button8 = (gcnew System::Windows::Forms::Button());
+			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
 			this->cB_Instance = (gcnew System::Windows::Forms::CheckBox());
 			this->tB_InstanceNo = (gcnew System::Windows::Forms::TextBox());
 			this->statusStrip1 = (gcnew System::Windows::Forms::StatusStrip());
@@ -555,6 +561,10 @@ namespace Project1
 			// 
 			// panel2
 			// 
+			this->panel2->Controls->Add(this->button9);
+			this->panel2->Controls->Add(this->button8);
+			this->panel2->Controls->Add(this->button7);
+			this->panel2->Controls->Add(this->comboBox1);
 			this->panel2->Controls->Add(this->cB_Instance);
 			this->panel2->Controls->Add(this->tB_InstanceNo);
 			this->panel2->Controls->Add(this->statusStrip1);
@@ -598,6 +608,55 @@ namespace Project1
 			this->panel2->Name = L"panel2";
 			this->panel2->Size = System::Drawing::Size(1092, 311);
 			this->panel2->TabIndex = 32;
+			// 
+			// button9
+			// 
+			this->button9->Font = (gcnew System::Drawing::Font(L"Tahoma", 8.25F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->button9->Location = System::Drawing::Point(841, 144);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(52, 26);
+			this->button9->TabIndex = 52;
+			this->button9->Text = L"rename";
+			this->button9->UseVisualStyleBackColor = true;
+			this->button9->Click += gcnew System::EventHandler(this, &MyForm::button9_Click);
+			// 
+			// button8
+			// 
+			this->button8->Font = (gcnew System::Drawing::Font(L"Tahoma", 11, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->button8->Location = System::Drawing::Point(894, 144);
+			this->button8->Name = L"button8";
+			this->button8->Size = System::Drawing::Size(26, 26);
+			this->button8->TabIndex = 51;
+			this->button8->Text = L"-";
+			this->button8->UseVisualStyleBackColor = true;
+			this->button8->Click += gcnew System::EventHandler(this, &MyForm::button8_Click);
+			// 
+			// button7
+			// 
+			this->button7->Font = (gcnew System::Drawing::Font(L"Tahoma", 11, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->button7->Location = System::Drawing::Point(814, 144);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(26, 26);
+			this->button7->TabIndex = 50;
+			this->button7->Text = L"+";
+			this->button7->UseVisualStyleBackColor = true;
+			this->button7->Click += gcnew System::EventHandler(this, &MyForm::button7_Click);
+			// 
+			// comboBox1
+			// 
+			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->comboBox1->Font = (gcnew System::Drawing::Font(L"Tahoma", 11, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point, 
+				static_cast<System::Byte>(204)));
+			this->comboBox1->FormattingEnabled = true;
+			this->comboBox1->ItemHeight = 18;
+			this->comboBox1->Location = System::Drawing::Point(588, 144);
+			this->comboBox1->Name = L"comboBox1";
+			this->comboBox1->Size = System::Drawing::Size(222, 26);
+			this->comboBox1->TabIndex = 49;
+			this->comboBox1->SelectedIndexChanged += gcnew System::EventHandler(this, &MyForm::comboBox1_TextUpdated);
 			// 
 			// cB_Instance
 			// 
@@ -934,6 +993,7 @@ TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		Void	button4_Click					(Object^, EventArgs^			);	// Replace new coordinates with the current ones for a celected window
 		Void	button5_Click					(Object^, EventArgs^			);	// View selected window
 		Void	button6_Click					(Object^, EventArgs^			);	// Reposition single selected window (only in grid1)
+		Void	button7_Click					(Object^, EventArgs^			);	// Add new profile
 		Void	dgv1_Resize						(Object^, EventArgs^			);	// Resize checkbox columns in both grids
 		Void	dgv1_SelectionChanged			(Object^, EventArgs^			);	// Move through the Grid
 		Void	dgv1_CellContentClick			(Object^, dgv_CellEvtArgs^		);	// Grid helper1 -- checkBox selection
@@ -954,6 +1014,9 @@ TMPLT	void	setGridCheckbox					(DataGridView^, T&, int, int	);	//
 		Void	tB_Filter1_Leave				(Object^, EventArgs^			);	// Leave Event for a Filter Text Box
 		Void	control_MouseHover				(Object^, EventArgs^			);	// Mouse hover event
 		Void	control_MouseLeave				(Object^, EventArgs^			);	// Mouse leave event
+		Void	comboBox1_TextUpdated			(Object^, EventArgs^			);
+		Void	button8_Click					(Object^, EventArgs^			);	// Remove profile
+		Void	button9_Click					(Object^, EventArgs^			);	// Rename current profile
 	};
 
 	#undef TMPLT

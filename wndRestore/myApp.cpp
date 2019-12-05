@@ -1,24 +1,19 @@
 // C++ logic
 
+#include "Globals.h"
 #include "myApp.h"
 #include <regex>
 #include <tlhelp32.h>
-
-#pragma comment(lib, "SHELL32.LIB")
-
-#define SWITCH()	do
-#define SWITCH_END	while(false)
-#define CASE(x)		if(x)  {
-#define BREAK		break; }
-#define DEFAULT		{
 
 // =======================================================================================================================
 
 namespace myApplication
 {
 	// Global storage for program data
-	std::vector<wndData> vec_data;
-	std::vector<iniData> vec_ini;
+	std::vector<wndData>	vec_data;
+	std::vector<iniData>	vec_ini;
+	std::vector<myString>	vec_profiles;
+	myString				str_profile;
 
 	// ----------------------------------------------------------------------------------------------------------------
 
@@ -87,6 +82,7 @@ namespace myApplication
 								data.windowTitleOrig = data.windowTitle;
 								data.windowClassOrig = data.windowClass;
 								data.fullExeNameOrig = data.fullExeName;
+								data.profile		 = str_profile;
 
 								vec->push_back(data);
 							}
@@ -187,7 +183,7 @@ namespace myApplication
 		);
 
 		// Add unique index to each entry
-		for(UINT i = 0; i < vec->size(); i++)
+		for(size_t i = 0; i < vec->size(); i++)
 		{
 			wndData *iter = &vec->at(i);
 			iter->instanceNo = 1;
@@ -197,7 +193,8 @@ namespace myApplication
 			{
 				wndData *prev = &vec->at(i-1);
 
-				// If exe file is present more than once, set InstanceNo depending on the running time of the process (the longer it has been running, the lower instNo)
+				// If exe file is present more than once, set InstanceNo depending on the running time of the process:
+				// the longer it has been running, the lower instNo
 				if( iter->shortExeName == prev->shortExeName )
 					iter->instanceNo = prev->instanceNo + 1;
 			}
@@ -208,11 +205,15 @@ namespace myApplication
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Read data from the .ini-file
-	int appMain::read_ini_file()
+	int appMain::read_ini_file(bool doReadProfiles /*default=false*/)
 	{
 		auto *vec = &vec_ini;
+		auto *prf = &vec_profiles;
 
 		vec->clear();
+
+		if( doReadProfiles )
+			prf->clear();
 
 		int res = -1;
 
@@ -242,13 +243,10 @@ namespace myApplication
 
 			if( file.is_open() )
 			{
-				std::string line, str;
-
-				int lineNo = 0;
-
-				bool isRecord = false;
-
-				iniData ini;
+				std::string		line, str;
+				int				lineNo = 0, pos;
+				bool			isRecord = false;
+				iniData			ini;
 
 				while( std::getline(file, line) && error.empty() )
 				{
@@ -271,11 +269,10 @@ namespace myApplication
 						continue;
 					}
 
-					if( line[0] == '[' )
+					// { marks the beginning of the global record
+					if( line[0] == '{' && doReadProfiles )
 					{
-						isRecord = true;
-
-						int pos = line.find_first_of(']') + 1;
+						pos = line.find_first_of('}') + 1;
 
 						std::string lineName = line.substr(0, pos);
 						std::string lineData = line.substr(pos, len - pos);
@@ -283,13 +280,42 @@ namespace myApplication
 						// switch by string
 						SWITCH()
 						{
+							CASE( lineName == "{Profiles}" )
+								prf->push_back(getMyStr(lineData));
+								BREAK;
+
+						} SWITCH_END;
+
+						if( str_profile.empty() )
+							str_profile = prf->back();
+
+						continue;
+					}
+
+					// [ marks the beginning of the record
+					if( line[0] == '[' )
+					{
+						isRecord = true;
+
+						pos = line.find_first_of(']') + 1;
+
+						std::string lineName = line.substr(0, pos);
+						std::string lineData = line.substr(pos, len - pos);
+
+						// switch by string
+						SWITCH()
+						{
+							CASE( lineName == "[Profile]" )
+								ini.profile = getMyStr(lineData);
+								BREAK;
+
 							CASE( lineName == "[Title]" )
 								ini.Title = getMyStr(lineData);
 								BREAK;
 
 							CASE( lineName == "[Path]" )
 								ini.Path = getMyStr(lineData);
-								int pos = ini.Path.find_last_of('\\') + 1;
+								pos = ini.Path.find_last_of('\\') + 1;
 								ini.exeName = ini.Path.substr(pos, ini.Path.length() - pos);
 								BREAK;
 
@@ -334,6 +360,15 @@ namespace myApplication
 
 						} SWITCH_END;
 					}
+				}
+
+				// In case no profiles were found
+				if( str_profile.empty() )
+				{
+					str_profile = L"default";
+					prf->clear();
+					prf->push_back(str_profile);
+					replace_ini_profile(str_profile);
 				}
 
 				res = vec->size();
@@ -413,6 +448,12 @@ namespace myApplication
 					else
 					{
 						found = (str1 == str2);
+					}
+
+					// check profile
+					if( found )
+					{
+						found = (dat->profile == ini->profile);
 					}
 
 					// check Window Class
@@ -648,15 +689,37 @@ namespace myApplication
 			{
 				auto putComment = [&file]		(const std::string				 &data)				{ file << "# --- "				   << data << " ---"						<< std::endl; };
 				auto putStr     = [&file, this]	(const char *paramName, myString &data)				{ file << "[" << paramName << "]"  << getStr(data)							<< std::endl; };
+				auto putStr2    = [&file, this]	(const char *paramName, myString &data)				{ file << "{" << paramName << "}"  << getStr(data)							<< std::endl; };
 				auto putBool    = [&file]		(const char *paramName, bool	 &data)				{ file << "[" << paramName << "]"  << (data ? "Yes" : "No") 				<< std::endl; };
 				auto putStrExt  = [&file]		(const char *paramName, int x, int y, int w, int h)	{ file << "[" << paramName << "] " << x << " " << y << " " << w << " " << h << std::endl; };
 				auto putInt		= [&file]		(const char *paramName, int i)						{ file << "[" << paramName << "] " << i										<< std::endl; };
 
-				// data
+
+				// profiles
+				{
+					auto *vec = &vec_profiles;
+
+					putComment(getStr(L"Profiles"));
+
+					if( str_profile.length() )
+						putStr2("Profiles", str_profile);
+
+					for(size_t i = 0; i < vec->size(); i++)
+					{
+						myApplication::myString *str = &(vec->at(i));
+
+						if( str->length() && *str != str_profile )
+							putStr2("Profiles", *str);
+					}
+
+					file << std::endl;
+				}
+
+				// data -- current selected windows
 				{
 					auto *vec = &vec_data;
 
-					for(UINT i = 0; i < vec->size(); i++)
+					for(size_t i = 0; i < vec->size(); i++)
 					{
 						wndData *data = &vec->at(i);
 
@@ -664,6 +727,7 @@ namespace myApplication
 						{
 							putComment(getStr(data->shortExeName));
 
+							putStr   ("Profile",	   str_profile									 );
 							putStr   ("Title",		   data->windowTitle							 );
 							putStr   ("Class",		   data->windowClass							 );
 							putBool  ("Iconic",		   data->isIconic								 );
@@ -680,18 +744,22 @@ namespace myApplication
 					}
 				}
 
-				// ini
+				// ini -- windows from ini file
 				{
 					auto *vec = &vec_ini;
 
-					for(UINT i = 0; i < vec->size(); i++)
+					for(size_t i = 0; i < vec->size(); i++)
 					{
 						iniData *ini = &vec->at(i);
 
-						if( ini->isChecked )
+						bool isIniChecked = ini->isChecked;
+						bool isOtherExistingProfile = (ini->profile != str_profile) && (isProfileFound(ini->profile));
+
+						if( isIniChecked || isOtherExistingProfile )
 						{
 							putComment(getStr(ini->Title));
 
+							putStr   ("Profile",	   ini->profile					 );
 							putStr	 ("Title",		   ini->Title					 );
 							putStr	 ("Class",		   ini->Class					 );
 							putBool	 ("Iconic",		   ini->isIconic				 );
@@ -980,6 +1048,30 @@ namespace myApplication
 
 		return;
 	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Checks if the profile is found in the list of known profiles
+	bool appMain::isProfileFound(const myString &profile)
+	{
+		for(size_t i = 0; i < vec_profiles.size(); i++)
+		{
+			if( vec_profiles[i] == profile )
+				return true;
+		}
+
+		return false;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Replace profile name for all vec_ini entries
+	void appMain::replace_ini_profile(const myString &new_profile)
+	{
+		for(size_t i = 0; i < vec_ini.size(); i++)
+			vec_ini[i].profile = new_profile;
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
 
 }; // namespace Project1
 

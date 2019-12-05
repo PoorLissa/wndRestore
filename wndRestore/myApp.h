@@ -2,6 +2,7 @@
 
 #pragma once
 #pragma comment(lib, "User32.lib")
+#pragma comment(lib, "SHELL32.LIB")
 
 #include <windows.h>
 #include <fstream>
@@ -45,7 +46,7 @@ namespace myApplication {
 		{
 		}
 
-		myString	windowTitle, windowClass, fullExeName, shortExeName, windowTitleOrig, windowClassOrig, fullExeNameOrig;
+		myString	windowTitle, windowClass, fullExeName, shortExeName, windowTitleOrig, windowClassOrig, fullExeNameOrig, profile;
 		HWND		hWnd;
 		int			X, Y, W, H, index, xNew, yNew, wNew, hNew, instanceNo;
 		bool		isChecked, isVisible, isIconic, customTitle, customClass, customPath, customInst, isChanged;
@@ -77,15 +78,17 @@ namespace myApplication {
 			customInst	 = false;
 		}
 
-		myString	Title, Path, Class, exeName;
+		myString	Title, Path, Class, exeName, profile;
 		int			X, Y, W, H, instanceNo;
 		bool	    isChecked, isFound, isIconic, customTitle, customClass, customPath, customInst;
 	};
 
 	// -----------------------------------------------------------------------------------------------------------------------
 
-	extern std::vector<wndData> vec_data;
-	extern std::vector<iniData> vec_ini;
+	extern std::vector<wndData>		vec_data;
+	extern std::vector<iniData>		vec_ini;
+	extern std::vector<myString>	vec_profiles;
+	extern myString					str_profile;
 
 	// -----------------------------------------------------------------------------------------------------------------------
 
@@ -97,7 +100,7 @@ namespace myApplication {
 
 static	void		getWindowInfo		(wndData &, char = 0);				// Get additional window information
 		void		getWindows			();									// Get sorted list of currently active windows with the info about them
-		int			read_ini_file		();									// Read data from the .ini-file
+		int			read_ini_file		(bool = false);						// Read data from the .ini-file
 		void		compare_wnd_and_ini ();									// Compare existing windows list with a list from .ini file
 		int			repositionWindows	(const int = -1);					// Move selected windows to their corresponding positions
 		bool		save_ini			();									// Save data to ini-file
@@ -113,6 +116,8 @@ static	void		getWindowInfo		(wndData &, char = 0);				// Get additional window i
 		std_str		getStr				(const myString &s) { return  std_str(&s[0], &s[s.length()]); }
 		std_str		getLastError		()					{ return _error;						  }
 		void		clearLastError		()					{ _error.clear();						  }
+		bool		isProfileFound		(const myString &);					// Checks if the profile is found in the list of known profiles
+		void		replace_ini_profile (const myString &);					// Replace profile name for all vec_ini entries
 		
 	 private:
 		std_str*	get_file_path		(const char file);					// Get .exe or .ini fileName

@@ -1,12 +1,16 @@
 // C# interface
 
+#include "Globals.h"
 #include "MyForm.h"
+#include "profileForm.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
 
 using namespace System::Security::Principal;
 using namespace System::Diagnostics;
+
+extern myApplication::appMain cpp_app;
 
 // =======================================================================================================================
 
@@ -27,14 +31,13 @@ void Main(array<String^>^ args)
 
 	Application::EnableVisualStyles();
 	Application::SetCompatibleTextRenderingDefault(false);
+	   Project1::MyForm form;
 
 	// Check if the application is running in administrator mode
 	WindowsIdentity  ^identity  = WindowsIdentity::GetCurrent();
 	WindowsPrincipal ^principal = gcnew WindowsPrincipal(identity);
 
 	myApplication::isAdmin = principal->IsInRole(WindowsBuiltInRole::Administrator);
-
-	Project1::MyForm form;
 
 	if( myApplication::isAdmin )
 	{
@@ -623,10 +626,10 @@ namespace Project1
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// Get all the data from Windows and from ini-file
-	void MyForm::renewPhysicalData()
+	Void MyForm::renewPhysicalData()
 	{
+		cpp_app.read_ini_file(!myApplication::initDone);
 		cpp_app.getWindows();
-		cpp_app.read_ini_file();
 		cpp_app.compare_wnd_and_ini();
 
 
@@ -636,6 +639,24 @@ namespace Project1
 		{
 			MessageBox::Show(gcnew String(last_error.c_str()));
 			cpp_app.clearLastError();
+		}
+
+		// Fill the drop-list of profiles
+		if( myApplication::vec_profiles.size() )
+		{
+			comboBox1->Items->Clear();
+
+			for(size_t i = 0; i < myApplication::vec_profiles.size(); i++)
+			{
+				if( myApplication::vec_profiles[i].length() )
+					comboBox1->Items->Add(gcnew String(myApplication::vec_profiles[i].c_str()));
+			}
+
+			comboBox1->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+			{
+				comboBox1->SelectedIndex = comboBox1->Items->IndexOf(gcnew String(myApplication::str_profile.c_str()));
+			}
+			comboBox1->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
 		}
 
 		return;
@@ -661,7 +682,7 @@ namespace Project1
 		}
 
 		// Fill grid1 with data
-		for(UINT i = 0; i < myApplication::vec_data.size(); i++)
+		for(size_t i = 0; i < myApplication::vec_data.size(); i++)
 		{
 			auto data = &(myApplication::vec_data[i]);
 
@@ -685,11 +706,12 @@ namespace Project1
 		}
 
 		// Fill grid2 with data
-		for(UINT i = 0; i < myApplication::vec_ini.size(); i++)
+		for(size_t i = 0; i < myApplication::vec_ini.size(); i++)
 		{
 			auto ini = &(myApplication::vec_ini[i]);
 
-			if( !ini->isFound )
+			// Add items to grid if they weren't found and the profile matches
+			if( !ini->isFound && ini->profile == myApplication::str_profile )
 			{
 				num2++;
 				num4++;
@@ -750,7 +772,6 @@ namespace Project1
 	Void MyForm::button2_Click(Object^ sender, EventArgs^ e)
 	{
 		renewPhysicalData();
-
 		redrawGridData();
 
 		return;
@@ -1230,7 +1251,7 @@ namespace Project1
 				myApplication::initDone = false;
 
 				// Fill grid1 with data
-				for(UINT i = 0; i < myApplication::vec_data.size(); i++)
+				for(size_t i = 0; i < myApplication::vec_data.size(); i++)
 				{
 					auto data = &(myApplication::vec_data[i]);
 
@@ -1338,36 +1359,27 @@ namespace Project1
 		String ^str("");
 
 		// Get control's Description
-		do {
-			
+		SWITCH()
+		{
 			Type ^t = sender->GetType();
-			
-			if( t == Button::typeid )
-			{
+
+			CASE( t == Button::typeid )
 				str = static_cast<Button^>(sender)->AccessibleDescription;
-				break;
-			}
+				BREAK;
 
-			if( t == TextBox::typeid )
-			{
+			CASE( t == TextBox::typeid )
 				str = static_cast<TextBox^>(sender)->AccessibleDescription;
-				break;
-			}
+				BREAK;
 
-			if( t == CheckBox::typeid )
-			{
+			CASE( t == CheckBox::typeid )
 				str = static_cast<CheckBox^>(sender)->AccessibleDescription;
-				break;
-			}
+				BREAK;
 
-			if( t == DataGridView::typeid )
-			{
+			CASE( t == DataGridView::typeid )
 				str = static_cast<DataGridView^>(sender)->AccessibleDescription;
-				break;
-			}
+				BREAK;
 			
-		}
-		while( false );
+		} SWITCH_END;
 
 		toolStripStatusLabel1->Text = str;
 
@@ -1380,6 +1392,141 @@ namespace Project1
 	{
 		toolStripStatusLabel1->Text = "";
 	}
+
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Add new profile (Show modal form)
+	Void MyForm::button7_Click(Object^ sender, EventArgs^ e)
+	{
+		if( myApplication::initDone )
+		{
+			profileForm ^form = gcnew profileForm();
+
+			unsigned int sizeOld = myApplication::vec_profiles.size();
+
+			form->Tag = "form_tag_1_add";
+			form->StartPosition = FormStartPosition::CenterParent;
+			form->ShowDialog();
+
+			// Proceed after the form closes:
+			unsigned int sizeNew = myApplication::vec_profiles.size();
+
+			if( sizeNew > sizeOld )
+			{
+				for(size_t i = sizeOld; i < sizeNew; i++)
+				{
+					comboBox1->Items->Add(gcnew String(myApplication::vec_profiles[i].c_str()));
+				}
+			}
+		}
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// On combobox item change
+	Void MyForm::comboBox1_TextUpdated(Object^ sender, EventArgs^ e)
+	{
+		cpp_app.getStr_fromSystem(comboBox1->Text, myApplication::str_profile);
+
+		if( myApplication::initDone )
+		{
+			button2_Click(nullptr, nullptr);
+		}
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Remove current profile
+	Void MyForm::button8_Click(Object^ sender, EventArgs^ e)
+	{
+		if( comboBox1->Items->Count == 1 )
+		{
+			MessageBox::Show("Unable to remove the last remaining profile", "Warning!");
+		}
+		else
+		{
+			auto *vec = &myApplication::vec_profiles;
+
+			if( vec->size() )
+			{
+				int index = comboBox1->SelectedIndex;
+
+				comboBox1->Items->Clear();
+
+				for(size_t i = 0; i < vec->size(); i++)
+				{
+					myApplication::myString *str = &(vec->at(i));
+
+					if( *str == myApplication::str_profile )
+						str->clear();
+
+					if( str->length() )
+						comboBox1->Items->Add(gcnew String(str->c_str()));
+				}
+
+				index = index ? index : 0;
+
+				if( index >= comboBox1->Items->Count )
+					index--;
+
+				comboBox1->SelectedIndex = index;
+			}
+		}
+	
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Rename current profile
+	Void MyForm::button9_Click(Object^ sender, EventArgs ^e)
+	{
+		profileForm ^form = gcnew profileForm();
+
+		form->Tag = "form_tag_2_rename";
+		form->StartPosition = FormStartPosition::CenterParent;
+		form->ShowDialog();
+
+		myApplication::myString new_profile_name;
+		cpp_app.getStr_fromSystem(form->Tag->ToString(), new_profile_name);
+
+
+		// Make sure user has pressed 'Rename' button (tag will change)
+		if( form->Tag->ToString() != "form_tag_2_rename" && !cpp_app.isProfileFound(new_profile_name) )
+		{
+			comboBox1->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+			{
+				for(size_t i = 0; i < myApplication::vec_profiles.size(); i++)
+				{
+					if( myApplication::vec_profiles[i] == myApplication::str_profile )
+					{
+						myApplication::str_profile = new_profile_name;
+						new_profile_name = myApplication::vec_profiles[i];					// remember old profile name
+						myApplication::vec_profiles[i] = myApplication::str_profile;
+						break;
+					}
+				}
+
+				for(size_t i = 0; i < myApplication::vec_ini.size(); i++)
+				{
+					if( myApplication::vec_ini[i].profile == new_profile_name )
+						myApplication::vec_ini[i].profile = myApplication::str_profile;
+				}
+
+				int index = comboBox1->SelectedIndex;
+
+				comboBox1->Items->RemoveAt(index);
+				comboBox1->Items->Insert(index, gcnew String(cpp_app.getStr(myApplication::str_profile).c_str()));
+				comboBox1->SelectedIndex = index;
+			}
+			comboBox1->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+
+			// Automatically save changes, otherwise we will lose them if the user changes item in combobox
+			cpp_app.save_ini();
+		}
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
 
 }; // namespace Project1
 
