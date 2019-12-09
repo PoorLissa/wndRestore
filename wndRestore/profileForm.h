@@ -1,3 +1,4 @@
+// Form used to create or rename profiles
 #pragma once
 
 #include "myApp.h"
@@ -158,6 +159,7 @@ namespace Project1
 					buttonText = "Rename";
 					button1->Text = buttonText;
 					Text = "Rename Profile";
+					textBox1->Text = gcnew String(myApplication::str_profile.c_str());
 				}
 
 				// Focus on textbox input

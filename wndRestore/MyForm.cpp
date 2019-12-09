@@ -1528,6 +1528,47 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
+	// Profile button On Mouse Enter
+	Void MyForm::profile_button_enter(Object ^sender, EventArgs ^e)
+	{
+		Color ^clr;
+		auto btn = static_cast<Button^>(sender);
+
+		SWITCH()
+		{
+			CASE( btn->Tag->ToString() == "1" )
+				clr = Color::Green;
+				BREAK;
+
+			CASE( btn->Tag->ToString() == "2" )
+				clr = Color::DarkBlue;
+				BREAK;
+
+			CASE( btn->Tag->ToString() == "3" )
+				clr = Color::Red;
+				BREAK;
+
+			DEFAULT
+				clr = Color::Black;
+				BREAK;
+
+		} SWITCH_END;
+
+		btn->ForeColor = *clr;
+		btn->Font = gcnew System::Drawing::Font(btn->Font, System::Drawing::FontStyle::Bold);
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Profile button On Mouse Leave
+	Void MyForm::profile_button_leave(Object ^sender, EventArgs ^e)
+	{
+		auto btn = static_cast<Button^>(sender);
+
+		btn->ForeColor = Color::CadetBlue;
+		btn->Font = gcnew System::Drawing::Font(btn->Font, System::Drawing::FontStyle::Regular);
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
 }; // namespace Project1
 
 // =======================================================================================================================
