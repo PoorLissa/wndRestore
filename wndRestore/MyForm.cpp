@@ -84,6 +84,9 @@ namespace Project1
 		tB_Filter1->Font = (gcnew System::Drawing::Font(L"Calibri", 9, FontStyle::Regular, GraphicsUnit::Point, static_cast<System::Byte>(204)));
 		tB_Filter1->Text = FILTER_TXT;
 
+		comboBox1->DropDownStyle = ComboBoxStyle::DropDownList;
+		comboBox1->DrawMode = DrawMode::OwnerDrawFixed;
+
 		myApplication::initDone = true;
 
 		return;
@@ -210,6 +213,7 @@ namespace Project1
 		   cB_Title->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 		   cB_Class->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 		    cB_Path->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
+		cB_Instance->CheckedChanged -= gcnew EventHandler(this, &MyForm::cB_CustomText_Changed);
 
 		if( index >= 0 )
 		{
@@ -299,7 +303,7 @@ namespace Project1
 		}
 		else
 		{
-			array<TextBox^       >^ arr1 = { tB_Title, tB_Class, tB_Path };
+			array<TextBox^       >^ arr1 = { tB_Title, tB_Class, tB_Path, tB_InstanceNo };
 			array<NumericUpDown ^>^ arr2 = { numUpD_OldX, numUpD_OldY, numUpD_OldW, numUpD_OldH, numUpD_NewX, numUpD_NewY, numUpD_NewW, numUpD_NewH };
 
 			for(int i = 0; i < arr1->Length; i++)
@@ -312,6 +316,7 @@ namespace Project1
 		       cB_Title->Checked = false;
 		       cB_Class->Checked = false;
 		        cB_Path->Checked = false;
+			cB_Instance->Checked = false;
  		}
 
 		tB_Title->BackColor = tb_title_color;
@@ -652,11 +657,11 @@ namespace Project1
 					comboBox1->Items->Add(gcnew String(myApplication::vec_profiles[i].c_str()));
 			}
 
-			comboBox1->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+			comboBox1->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBox1_SelectedIndexChanged);
 			{
 				comboBox1->SelectedIndex = comboBox1->Items->IndexOf(gcnew String(myApplication::str_profile.c_str()));
 			}
-			comboBox1->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+			comboBox1->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBox1_SelectedIndexChanged);
 		}
 
 		return;
@@ -1425,14 +1430,37 @@ namespace Project1
 	// ----------------------------------------------------------------------------------------------------------------
 
 	// On combobox item change
-	Void MyForm::comboBox1_TextUpdated(Object^ sender, EventArgs^ e)
+	Void MyForm::comboBox1_SelectedIndexChanged(Object^ sender, EventArgs^ e)
 	{
+		static int old_index(0);
+			   int new_index = comboBox1->SelectedIndex;
+
 		cpp_app.getStr_fromSystem(comboBox1->Text, myApplication::str_profile);
 
 		if( myApplication::initDone )
 		{
-			button2_Click(nullptr, nullptr);
+			panel0->Focus();
+
+			// Don't allow full refresh if the index has not really changed
+			if( new_index != old_index )
+			{
+				// Prevent redrawing combobox items (as button2_Click repopulates the combobox)
+				comboBox1->DrawItem -= gcnew DrawItemEventHandler(this, &MyForm::comboBox1_DrawItem);
+
+					button2_Click(nullptr, nullptr);
+
+				comboBox1->DrawItem += gcnew DrawItemEventHandler(this, &MyForm::comboBox1_DrawItem);
+
+				// Update current item once
+				comboBox1->BeginUpdate();
+				comboBox1->EndUpdate();
+			}
 		}
+
+		// Remember old index for future comparison
+		old_index = new_index;
+
+		return;
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
@@ -1493,7 +1521,7 @@ namespace Project1
 		// Make sure user has pressed 'Rename' button (tag will change)
 		if( form->Tag->ToString() != "form_tag_2_rename" && !cpp_app.isProfileFound(new_profile_name) )
 		{
-			comboBox1->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+			comboBox1->SelectedIndexChanged -= gcnew EventHandler(this, &MyForm::comboBox1_SelectedIndexChanged);
 			{
 				for(size_t i = 0; i < myApplication::vec_profiles.size(); i++)
 				{
@@ -1518,7 +1546,7 @@ namespace Project1
 				comboBox1->Items->Insert(index, gcnew String(cpp_app.getStr(myApplication::str_profile).c_str()));
 				comboBox1->SelectedIndex = index;
 			}
-			comboBox1->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBox1_TextUpdated);
+			comboBox1->SelectedIndexChanged += gcnew EventHandler(this, &MyForm::comboBox1_SelectedIndexChanged);
 
 			// Automatically save changes, otherwise we will lose them if the user changes item in combobox
 			cpp_app.save_ini();
@@ -1566,6 +1594,37 @@ namespace Project1
 
 		btn->ForeColor = Color::CadetBlue;
 		btn->Font = gcnew System::Drawing::Font(btn->Font, System::Drawing::FontStyle::Regular);
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// Custom DrawItem event for combo box
+	Void MyForm::comboBox1_DrawItem(Object^ sender, DrawItemEventArgs^ e)
+	{
+		if( e->Index >= 0 )
+		{
+			ComboBox ^cbx = static_cast<ComboBox^>(sender);
+
+			StringFormat ^sf = gcnew StringFormat();
+			sf->Alignment = StringAlignment::Far;
+
+			String ^txt = e->Index >= 0 ? comboBox1->Items[e->Index]->ToString() : "";
+
+			// Set the Brush to ComboBox ForeColor to maintain any ComboBox color settings
+			Brush ^b = gcnew SolidBrush(cbx->ForeColor);
+				
+			e->DrawBackground();
+
+			// If drawing highlighted selection, change brush
+			if( (e->State & DrawItemState::Selected) == DrawItemState::Selected )
+				b = SystemBrushes::HighlightText;
+
+			int offset = (e->Bounds.X == 3 && e->Bounds.Y == 3) ? 33 : 50;
+
+			// Draw the string
+			e->Graphics->DrawString(txt, cbx->Font, b, float(e->Bounds.X + e->Bounds.Width - offset), float(e->Bounds.Y), sf);
+
+			e->DrawFocusRectangle();
+		}
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 

@@ -424,7 +424,7 @@ namespace myApplication
 			{
 				dat = &vec_data[j];
 
-				// Skip _this_app's_ process
+				// Skip [This App's] process
 				if( dat->fullExeName == exe )
 				{
 					dat->isChecked = false;
@@ -435,25 +435,23 @@ namespace myApplication
 
 				if( !dat->isChecked )
 				{
-					bool found = false;
-
-					// In order to compare, convert both strings to lower case
-					std::string str1 = getStr(dat->fullExeName), str2 = getStr(ini->Path);
-
-					// check path
-					if( ini->customPath )
-					{
-						found = regExpCompare(str1, str2);
-					}
-					else
-					{
-						found = (str1 == str2);
-					}
-
 					// check profile
+					bool found = (dat->profile == ini->profile);
+
 					if( found )
 					{
-						found = (dat->profile == ini->profile);
+						// In order to compare, convert both strings to lower case
+						std::string str1 = getStr(dat->fullExeName), str2 = getStr(ini->Path);
+
+						// check path
+						if( ini->customPath )
+						{
+							found = regExpCompare(str1, str2);
+						}
+						else
+						{
+							found = (str1 == str2);
+						}
 					}
 
 					// check Window Class
@@ -511,6 +509,7 @@ namespace myApplication
 
 						ini->isFound = true;
 
+						// break out of for( .. vec_data ..)
 						break;
 					}
 				}
@@ -536,6 +535,7 @@ namespace myApplication
 
 			return plc.showCmd == SW_SHOWMAXIMIZED;
 		};
+
 
 		for(UINT i = 0; i < vec_data.size(); i++)
 		{
