@@ -537,7 +537,7 @@ namespace myApplication
 		};
 
 
-		for(UINT i = 0; i < vec_data.size(); i++)
+		for(size_t i = 0; i < vec_data.size(); i++)
 		{
 			wndData *dat = &vec_data[i];
 

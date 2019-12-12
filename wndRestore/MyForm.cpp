@@ -1429,41 +1429,6 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
-	// On combobox item change
-	Void MyForm::comboBox1_SelectedIndexChanged(Object^ sender, EventArgs^ e)
-	{
-		static int old_index(0);
-			   int new_index = comboBox1->SelectedIndex;
-
-		cpp_app.getStr_fromSystem(comboBox1->Text, myApplication::str_profile);
-
-		if( myApplication::initDone )
-		{
-			panel0->Focus();
-
-			// Don't allow full refresh if the index has not really changed
-			if( new_index != old_index )
-			{
-				// Prevent redrawing combobox items (as button2_Click repopulates the combobox)
-				comboBox1->DrawItem -= gcnew DrawItemEventHandler(this, &MyForm::comboBox1_DrawItem);
-
-					button2_Click(nullptr, nullptr);
-
-				comboBox1->DrawItem += gcnew DrawItemEventHandler(this, &MyForm::comboBox1_DrawItem);
-
-				// Update current item once
-				comboBox1->BeginUpdate();
-				comboBox1->EndUpdate();
-			}
-		}
-
-		// Remember old index for future comparison
-		old_index = new_index;
-
-		return;
-	}
-	// ----------------------------------------------------------------------------------------------------------------
-
 	// Remove current profile
 	Void MyForm::button8_Click(Object^ sender, EventArgs^ e)
 	{
@@ -1597,6 +1562,39 @@ namespace Project1
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
+	// On combobox item change
+	Void MyForm::comboBox1_SelectedIndexChanged(Object^ sender, EventArgs^ e)
+	{
+		static int old_index(0);
+			   int new_index = comboBox1->SelectedIndex;
+
+		cpp_app.getStr_fromSystem(comboBox1->Text, myApplication::str_profile);
+
+		if( myApplication::initDone )
+		{
+			// Don't allow full refresh if the index has not really changed
+			if( new_index != old_index )
+			{
+				// Prevent redrawing combobox items (as button2_Click repopulates the combobox)
+				comboBox1->DrawItem -= gcnew DrawItemEventHandler(this, &MyForm::comboBox1_DrawItem);
+
+					button2_Click(nullptr, nullptr);
+
+				comboBox1->DrawItem += gcnew DrawItemEventHandler(this, &MyForm::comboBox1_DrawItem);
+
+				// Update current item once
+				comboBox1->BeginUpdate();
+				comboBox1->EndUpdate();
+			}
+		}
+
+		// Remember old index for future comparison
+		old_index = new_index;
+
+		return;
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
 	// Custom DrawItem event for combo box
 	Void MyForm::comboBox1_DrawItem(Object^ sender, DrawItemEventArgs^ e)
 	{
@@ -1625,6 +1623,13 @@ namespace Project1
 
 			e->DrawFocusRectangle();
 		}
+	}
+	// ----------------------------------------------------------------------------------------------------------------
+
+	// On combobox close event
+	Void MyForm::comboBox1_DropDownClosed(Object^ sender, EventArgs ^e)
+	{
+		panel0->Focus();
 	}
 	// ----------------------------------------------------------------------------------------------------------------
 
