@@ -44,6 +44,7 @@ namespace myApplication {
 			customTitle(false), customClass(false), customPath(false), customInst(false),
 			instanceNo(-1)
 		{
+			;
 		}
 
 		myString	windowTitle, windowClass, fullExeName, shortExeName, windowTitleOrig, windowClassOrig, fullExeNameOrig, profile;
@@ -60,6 +61,7 @@ namespace myApplication {
 		iniData() :
 			isIconic(false), customTitle(false), customClass(false), customPath(false), customInst(false)
 		{
+			;
 		}
 
 		void reset()

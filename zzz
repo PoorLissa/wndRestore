@@ -1,2 +1,27 @@
 
- gui version
+ -= gui version =-
+
+ 1. Templates -- Visual C++ -- CLR -- CLR Empty Project
+ 2. Project -- RMB -- Add -- New Item
+ 3. Visual C++ -- UI -- Windows Form
+ 4. Project -- Properties -- Linker -- System -- SubSystem -- Windows (/SUBSYSTEM:WINDOWS)
+ 5. Project -- Properties -- Linker -- Advanced -- EntryPoint -- Main
+ 6. Go to MyForm.cpp, add code:
+
+		#include "MyForm.h"
+
+		using namespace System;
+		using namespace System::Windows::Forms;
+
+		[STAThread]
+		void Main(array<String^>^ args)
+		{
+			Application::EnableVisualStyles();
+			Application::SetCompatibleTextRenderingDefault(false);
+			Project6::MyForm form;
+			Application::Run(%form);
+		}
+
+ 7. (Optional) May need to add some lib path(s), like C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib
+ 8. Compile and Run
+
