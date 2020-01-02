@@ -126,6 +126,15 @@ namespace Project1
 				}
 			}
 		}
+		else
+		{
+			System::Windows::Forms::MessageBox::Show("One or more process windows failed to reposition."
+													  "\n\n"
+													  "The program has been started in administrator mode. Nothing we can do about it yet.", "Attention",
+														System::Windows::Forms::MessageBoxButtons::OK,
+														System::Windows::Forms::MessageBoxIcon::Warning
+			);
+		}
 
 		return;
 	}
